@@ -5,11 +5,8 @@
 
 
 package RedeFerroviaria;
-import Exceptions.EmptyTreeException;
-import dataStructures.Entry;
-import dataStructures.List;
-
-import java.io.Serializable;
+import Exceptions.*;
+import dataStructures.*;
 
 
 /**

@@ -1,6 +1,7 @@
 package RedeFerroviaria;
 import Enums.Constants;
 import Exceptions.EmptyTreeException;
+import Exceptions.FullStackException;
 import dataStructures.*;
 
 public class StationClass implements StationUpdatable{
@@ -38,7 +39,7 @@ public class StationClass implements StationUpdatable{
     }
 
     @Override
-    public Iterator<Entry<String, Line>> linesIterator() throws EmptyTreeException {
+    public Iterator<Entry<String, Line>> linesIterator() throws EmptyTreeException, FullStackException {
         return linesTree.iterator();
     }
 

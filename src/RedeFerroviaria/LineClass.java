@@ -21,11 +21,18 @@ public class LineClass implements LineUpdatable{
     /**
      * Instance Variables
      */
-    private Dictionary<String, Station> stations;
-    private Dictionary<Integer, Train> trains;
-    private List<Station> stationsByInsertion;
-    private Dictionary<String, List<Train>> trainsByTerminal;
     private String name;
+    // Tree departure time of terminal 1 && 2
+    private OrderedDictionary<Date, Train> departureTerminal1;
+    private OrderedDictionary<Date, Train> departureTerminal2;
+    // Stations by order of insertion
+    private List<Station> stationsByInsertion;
+    // Map of stations K - Name of station; V - Station
+    private Dictionary<String, Station> stations;
+    // Map of Trains K - Nr of Train, V - Train
+    private Dictionary<Integer, Train> trains;
+
+
 
     static final long serialVersionUID = 0L;
 
@@ -36,8 +43,7 @@ public class LineClass implements LineUpdatable{
     public LineClass(String name){
         this.stations = new SepChainHashTable<>(Constants.DEFAULT_STATIONS.getValue());
         this.stationsByInsertion = new DoubleList<>();
-        this.trains = new SepChainHashTable<>(Constants.DEFAULT_STATIONS.getValue());
-        this.trainsByTerminal = new SepChainHashTable<>(2);
+        this.trains = new SepChainHashTable<>(Constants.DEFAULT_SCHEDULES.getValue());
         this.name = name;
     }
 

@@ -16,19 +16,13 @@ import Enums.Constants;
 /**
  * Class Train responsible to implement the prototyped methods in the Train interface
  */
-public class TrainClass implements Train {
-    /**
-     * Constant variables
-     */
-    private static int NOT_FOUND = Constants.NOT_FOUND.getValue();
+public class TrainClass implements TrainUpdatable {
     /**
      * Instance variables
      */
     private int nr;
+    private Station departureStation;
     private Date departureTime;
-    private String[] stops;
-    private int size;
-    private List<Entry<String, Date>> schedule;
 
     static final long serialVersionUID = 0L;
 
@@ -39,31 +33,6 @@ public class TrainClass implements Train {
      */
     public TrainClass(int nr, List<Entry<String, Date>> schedule){
         this.nr = nr;
-        this.departureTime = schedule.getFirst().getValue();
-        this.schedule = schedule;
-        this.stops = new String[this.schedule.size()];
-        size = 0;
-        sortStations();
-    }
-
-    public void sortStations(){
-        addStations();
-        SortAndSearch.sort(stops, size);
-    }
-
-    /**
-     * Adds the route of the train to an array which will be sorted by alphabetical order
-     */
-    private void addStations(){
-        try {
-            Iterator<Entry<String, Date>> ite = scheduleIterator();
-            while (ite.hasNext()){
-                Entry<String, Date> entry = ite.next();
-                stops[size++] = entry.getKey();
-            }
-        } catch (NoTrainsException ignored){} catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -76,23 +45,6 @@ public class TrainClass implements Train {
         return nr;
     }
 
-    @Override
-    public boolean hasSchedule(String startingStation, Date time) {
-        boolean isStartingStation = schedule.getFirst().getKey().equalsIgnoreCase(startingStation) || schedule.getLast().getKey().equalsIgnoreCase(startingStation);
-        if (!isStartingStation){
-            return false;
-        } else {
-            return stationHasTime(time);
-        }
-    }
-
-    @Override
-    public Iterator<Entry<String, Date>> scheduleIterator() throws NoTrainsException {
-        if (schedule == null){
-            throw new NoTrainsException();
-        }
-        return schedule.iterator();
-    }
 
     @Override
     public Date getDepartureTime() {
@@ -100,24 +52,18 @@ public class TrainClass implements Train {
     }
 
     @Override
-    public boolean hasStation(String startingStation) {
-        return SortAndSearch.binarySearch(stops, startingStation, size) != NOT_FOUND;
+    public boolean isStartingStation(String startingStation) {
+        return departureStation.getName().equalsIgnoreCase(startingStation);
     }
-
-
 
     @Override
-    public boolean isStartingStation(String startingStation) {
-        return schedule.getFirst().getKey().equalsIgnoreCase(startingStation);
+    public void setDepartureTime(Date time) {
+        departureTime = time;
     }
 
-    /**
-     * Checks if the route of the train departures at a given time from a certain station
-     * @param time - The time to look for
-     * @return true if the route of the train departures at a given time from a certain station. Otherwise, false
-     */
-    private boolean stationHasTime(Date time){
-       return schedule.getFirst().getValue().getHour() == time.getHour() && schedule.getFirst().getValue().getMinutes() == time.getMinutes() || schedule.getLast().getValue().getHour() == time.getHour() && schedule.getLast().getValue().getMinutes() == time.getMinutes();
+    @Override
+    public void setDepartureStation(Station station) {
+        departureStation = station;
     }
 }
 

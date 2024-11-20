@@ -23,5 +23,4 @@ public interface Entry<K extends Comparable<K>,V> extends Serializable, Comparab
 	 * @return value in the entry
 	 */
     V getValue( );
-
 }

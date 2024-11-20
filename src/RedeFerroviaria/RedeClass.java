@@ -4,7 +4,7 @@
  */
 
 package RedeFerroviaria;
-import Enums.Constants;
+import Enums.*;
 import Exceptions.*;
 import dataStructures.*;
 

@@ -9,7 +9,7 @@ package dataStructures;
 /**
  * Class Entry responsible to implement the methods of the Entry interface
  */
-public class EntryClass<K extends Comparable<K>,V> implements Entry<K,V> {
+public class EntryClass<K extends Comparable<K>,V> implements EntryUpdatable<K,V> {
     /**
      * Instance variables
      */
@@ -35,6 +35,16 @@ public class EntryClass<K extends Comparable<K>,V> implements Entry<K,V> {
     @Override
     public V getValue() {
         return value;
+    }
+
+    @Override
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    @Override
+    public void setKey(K key) {
+        this.key = key;
     }
 
     @Override

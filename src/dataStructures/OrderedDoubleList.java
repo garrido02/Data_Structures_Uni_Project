@@ -49,7 +49,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      * @param after - Node to be next to the new node  
      */
 	protected void addBeforeNode(Entry<K,V> element, DoubleListNode<Entry<K,V>> after){
-		//TODO: Left as an exercise.
         DoubleListNode<Entry<K,V>> newNode = new DoubleListNode<Entry<K,V>>(element,after.getPrevious(),after);
         if (after.getPrevious() != null ) {
             after.getPrevious().setNext(newNode);
@@ -86,7 +85,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      */
     protected void addLast( Entry<K,V> element )
     {
-        //TODO: Left as an exercise.
         DoubleListNode<Entry<K,V>> newNode = new DoubleListNode<>(element,tail,null);
         if( this.isEmpty() )
             head = newNode;
@@ -98,7 +96,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 
 	@Override
     public Entry<K, V> maxEntry() throws EmptyDictionaryException {
-		//TODO: Left as an exercise.
         if ( this.isEmpty())
             throw new EmptyDictionaryException();
         return tail.getElement();
@@ -106,7 +103,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 
     @Override
 	public Entry<K, V> minEntry() throws EmptyDictionaryException {
-		//TODO: Left as an exercise.
         if( this.isEmpty())
             throw new EmptyDictionaryException();
         return head.getElement();
@@ -120,7 +116,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      * @return DoubleListNode<E> where the Entry with key was found, or the one with the key immediately after
      */
 	protected DoubleListNode<Entry<K,V>> findNode (K key){
-		//TODO: Left as an exercise.
         DoubleListNode<Entry<K,V>> currentNode = head;
         while(currentNode != null){
             K currentKey = currentNode.getElement().getKey();
@@ -141,7 +136,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     @Override
 	public V find(K key) {
 		DoubleListNode<Entry<K,V>> node = findNode(key);
-		//TODO: Left as an exercise.
 
         if( node == null )
             return null;
@@ -155,14 +149,12 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 	public V insert(K key, V value) {
 		DoubleListNode<Entry<K,V>> node = findNode(key);
 		if ((node!=null) && (node.getElement().getKey().compareTo(key)==0)){
-			//TODO: Left as an exercise.
             V oldValue = node.getElement().getValue();
             node.getElement().setValue(value);
             return oldValue;
 		}
 		else { 
 		  Entry<K,V> newEntry=new EntryClass<K,V> (key, value);
-          //TODO: Left as an exercise.
             if( node == null )
                 this.addLast(newEntry);
             else
@@ -202,7 +194,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      * Removes and returns the value at the first entry in the list.
      */
     protected V removeFirst( ) throws EmptyDictionaryException {
-        //TODO: Left as an exercise.
         if (this.isEmpty()) {
             throw new EmptyDictionaryException();
         } else {
@@ -227,7 +218,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      */
     protected void removeLastNode( )
     {
-        //TODO: Left as an exercise.
         tail = tail.getPrevious();
         if( tail == null )
             head = null;
@@ -257,7 +247,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      */
     protected void removeMiddleNode( DoubleListNode<Entry<K,V>> node )
     {
-        //TODO: Left as an exercise.
         DoubleListNode<Entry<K,V>> previous = node.getPrevious();
         DoubleListNode<Entry<K,V>> next = node.getNext();
 
@@ -268,7 +257,6 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 
     }
 
-    //TODO: Left as an exercise. (DONE)
     @Override
     public V remove(K key) {
 		DoubleListNode<Entry<K,V>> node = findNode(key);
