@@ -152,22 +152,19 @@ public class BinarySearchTree<K extends Comparable<K>, V>
     BSTNode<Entry<K,V>> findNode(K key)
     {      
         BSTNode<Entry<K,V>> node = root;
-        BSTNode<Entry<K,V>> current = null;
         while ( node != null )
         {
             int compResult = key.compareTo( node.getElement().getKey() );
             if ( compResult == 0 )
                 return node;
             else if ( compResult < 0 ) {
-                current = node;
                 node = node.getLeft();
             }
             else {
-                current = node;
                 node = node.getRight();
             }
         }
-        return current;
+        return node;
     }                               
 
 

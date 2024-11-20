@@ -31,7 +31,7 @@ public class AVLTree<K extends Comparable<K>, V>
         if(zPos.isInternal())
             zPos.setHeight();
         // Improve if possible...
-        while (zPos!=null) {  // traverse up the tree towards the root
+        while (zPos!=null && zPos != root) {  // traverse up the tree towards the root
             zPos = (AVLNode<Entry<K, V>>) zPos.getParent();
             zPos.setHeight();
             if (!zPos.isBalanced()) {
@@ -54,11 +54,14 @@ public class AVLTree<K extends Comparable<K>, V>
     {
         V valueToReturn = null;
         AVLNode<Entry<K,V>> newNode = (AVLNode<Entry<K,V>>) findNode(key);
+        AVLNode<Entry<K,V>> current = (AVLNode<Entry<K,V>>) root;
         if (newNode == null){
             newNode = new AVLNode<>(new EntryClass<>(key, value));
+            if (current == null){
+                linkSubtree(newNode, null);
+            }
             boolean found = false;
-            AVLNode<Entry<K,V>> current = (AVLNode<Entry<K,V>>) root;
-            while (!found){
+            while (!found && current != null){
                 if (newNode.compareTo(current) < 0){
                     if (current.left == null){
                         current.setLeft(newNode);
@@ -79,6 +82,7 @@ public class AVLTree<K extends Comparable<K>, V>
             }
         }
         valueToReturn = newNode.element.getValue();
+        currentSize++;
         rebalance(newNode);
         return valueToReturn;
     }
@@ -87,10 +91,12 @@ public class AVLTree<K extends Comparable<K>, V>
     public V remove( K key )
      {
          V valueToReturn = null;
-         AVLNode<Entry<K,V>> node = (AVLNode<Entry<K, V>>) findNode(key).parent;
+         AVLNode<Entry<K,V>> node = (AVLNode<Entry<K, V>>) findNode(key);
          if (node != null){
-             valueToReturn = findNode(key).element.getValue();
+             valueToReturn = node.element.getValue();
+             node = (AVLNode<Entry<K, V>>) node.parent;
              remove(key);
+             currentSize--;
              rebalance(node);
          }
          return valueToReturn;

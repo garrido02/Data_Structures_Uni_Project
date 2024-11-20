@@ -20,8 +20,19 @@ public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinaryS
     {
         BSTNode<Entry<K,V>> B = A.right;
         A.setRight(B.left);
+        if (B.left != null){
+            B.left.setParent(A);
+        }
+        B.setParent(A.parent);
+        if (A.parent == null){
+            root = B;
+        } else if (A == A.parent.left){
+            A.parent.setLeft(B);
+        } else {
+            A.parent.setRight(B);
+        }
         B.setLeft(A);
-        root = B;
+        A.setParent(B);
     }
 
 
@@ -36,8 +47,20 @@ public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinaryS
     {
         BSTNode<Entry<K,V>> B = C.left;
         C.setLeft(B.right);
+
+        if (B.right != null){
+            B.right.setParent(C);
+        }
+        B.setParent(C.parent);
+        if (C.parent == null){
+            root = B;
+        } else if (C == C.parent.left){
+            C.parent.setLeft(B);
+        } else {
+            C.parent.setRight(B);
+        }
         B.setRight(C);
-        root = B;
+        C.setParent(B);
     }
 
     /**

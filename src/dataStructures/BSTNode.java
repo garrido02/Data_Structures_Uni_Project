@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @param <E> Generic Value
  */
-public class BSTNode<E> implements Serializable, Comparable<BSTNode<E>> {
+public class BSTNode<E extends Comparable<E>> implements Serializable, Comparable<BSTNode<E>> {
 
     /**
      * Element stored in the node.
@@ -115,6 +115,6 @@ public class BSTNode<E> implements Serializable, Comparable<BSTNode<E>> {
 
     @Override
     public int compareTo(BSTNode<E> o) {
-        return this.element.equals(o.element) ? 0 : 1;
+        return this.element.compareTo(o.element);
     }
 }
