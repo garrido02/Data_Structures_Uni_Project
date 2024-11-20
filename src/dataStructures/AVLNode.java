@@ -10,10 +10,6 @@ package dataStructures;
  */
 class AVLNode<E> extends BSTNode<E>
 {
-
-
-
-
     /**
      * Height of the node
      */
@@ -82,11 +78,17 @@ class AVLNode<E> extends BSTNode<E>
     /**
      * Return the child of this node with greater height
      */
-    AVLNode<E> tallerChild()  {
-        //TODO -- careful about ties
-        return null;
+    AVLNode<E> tallerChild() {
+        AVLNode<E> leftChild = (AVLNode<E>) this.getLeft();
+        AVLNode<E> rightChild = (AVLNode<E>) this.getRight();
+        int leftChildHeight = getHeight(leftChild);
+        int rightChildHeight = getHeight(rightChild);
+        if (leftChildHeight > rightChildHeight)
+            return leftChild;
+        else if (leftChildHeight < rightChildHeight)
+            return rightChild;
+        return leftChild;
     }
-
 }
 
 

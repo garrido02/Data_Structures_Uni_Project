@@ -94,8 +94,7 @@ public class BSTNode<E> implements Serializable, Comparable<BSTNode<E>> {
     }
 
     boolean isInternal() {
-        //TODO
-        return true;
+        return left != null || right != null;
     }
 
     public void setLeft(BSTNode<E> left) {

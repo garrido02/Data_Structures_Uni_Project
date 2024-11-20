@@ -22,7 +22,7 @@ public class AVLTree<K extends Comparable<K>, V>
     }
 
     /**
-     * Rebalance method called by insert and remove.  Traverses the path from
+     * Rebalance method called by insert and remove. Traverses the path from
      * zPos to the root. For each node encountered, we recompute its height
      * and perform a trinode restructuring if it's unbalanced.
      * the rebalance is completed with O(log n) running time
@@ -52,50 +52,47 @@ public class AVLTree<K extends Comparable<K>, V>
     @Override
     public V insert( K key, V value )
     {
-        //TODO
-        V valueToReturn=null;
-        AVLNode<Entry<K,V>> newNode=null; // node where the new entry is being inserted (if find(key)==null)
-        // insert the new Entry (if find(key)==null)
-        // or set the new value (if find(key)!=null)
-        if(newNode != null) //(if find(key)==null)
-            rebalance(newNode); // rebalance up from the insertion node
+        V valueToReturn = null;
+        AVLNode<Entry<K,V>> newNode = (AVLNode<Entry<K,V>>) findNode(key);
+        if (newNode == null){
+            newNode = new AVLNode<>(new EntryClass<>(key, value));
+            boolean found = false;
+            AVLNode<Entry<K,V>> current = (AVLNode<Entry<K,V>>) root;
+            while (!found){
+                if (newNode.compareTo(current) < 0){
+                    if (current.left == null){
+                        current.setLeft(newNode);
+                        newNode.setParent(current);
+                        found = true;
+                    } else {
+                        current = (AVLNode<Entry<K, V>>) current.left;
+                    }
+                } else {
+                    if (current.right == null){
+                        current.setRight(newNode);
+                        newNode.setParent(current);
+                        found = true;
+                    } else {
+                        current = (AVLNode<Entry<K, V>>) current.right;
+                    }
+                }
+            }
+        }
+        valueToReturn = newNode.element.getValue();
+        rebalance(newNode);
         return valueToReturn;
-
     }
-
-
-
-
-
-
-
-        
-
-               
 
    @Override
     public V remove( K key )
      {
-         // TODO
-         V valueToReturn=null;
-         AVLNode<Entry<K,V>> node=null; // father of node where the key was
-         // removeNode is the BST remove(key)
-         if(node != null) //(if find(key)==null)
-             rebalance(node); // rebalance up from the node
+         V valueToReturn = null;
+         AVLNode<Entry<K,V>> node = (AVLNode<Entry<K, V>>) findNode(key).parent;
+         if (node != null){
+             valueToReturn = findNode(key).element.getValue();
+             remove(key);
+             rebalance(node);
+         }
          return valueToReturn;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

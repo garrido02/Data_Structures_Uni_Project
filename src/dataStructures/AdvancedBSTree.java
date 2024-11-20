@@ -9,41 +9,35 @@ package dataStructures;
  */
 public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K,V>
 {
-
-
-
-
-
-
-
-
     /**
-     * Performs a single left rotation rooted at Y node.
-     * Node X was a  right  child  of Y before the  rotation,
-     * then Y becomes the left child of X after the rotation.
-     * @param Y - root of the rotation
-     * @pre: Y has a right child
+     * Performs a single left rotation rooted at A node.
+     * Node B was a  right  child  of A before the  rotation,
+     * then A becomes the left child of B after the rotation.
+     * @param A - root of the rotation
+     * @pre: A has a right child
      */
-    protected void rotateLeft( BSTNode<Entry<K,V>> Y)
+    protected void rotateLeft( BSTNode<Entry<K,V>> A)
     {
-        // TODO
-        //  a single rotation modifies a constant number of parent-child relationships,
-        //  it can be implemented in O(1) time
+        BSTNode<Entry<K,V>> B = A.right;
+        A.setRight(B.left);
+        B.setLeft(A);
+        root = B;
     }
 
 
     /**
-     * Performs a single right rotation rooted at Y node.
-     * Node X was a  left  child  of Y before the  rotation,
-     * then Y becomes the right child of X after the rotation.
-     * @param Y - root of the rotation
-     * @pre: Y has a left child
+     * Performs a single right rotation rooted at C node.
+     * Node B was a  left  child  of C before the  rotation,
+     * then C becomes the right child of B after the rotation.
+     * @param C - root of the rotation
+     * @pre: C has a left child
      */
-    protected void rotateRight( BSTNode<Entry<K,V>> Y)
+    protected void rotateRight( BSTNode<Entry<K,V>> C)
     {
-        // TODO
-        //  a single rotation modifies a constant number of parent-child relationships,
-        //  it can be implemented in O(1) time
+        BSTNode<Entry<K,V>> B = C.left;
+        C.setLeft(B.right);
+        B.setRight(C);
+        root = B;
     }
 
     /**
@@ -68,10 +62,28 @@ public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinaryS
         // The double rotation arises when position x has the middle of the three relevant keys
         // and is first rotated above its parent Y, and then above what was originally its grandparent Z.
         // In any of the cases, the trinode restructuring is completed with O(1)running time
-        //TODO
+        BSTNode<Entry<K,V>> Y = X.parent;
+        BSTNode<Entry<K,V>> Z = Y.parent;
 
-        return null;
+        if (Z.left.equals(Y)){
+            if (Y.left.equals(X)){
+                rotateRight(Z);
+                return Y;
+            } else {
+                rotateLeft(Y);
+                rotateRight(Z);
+                return X;
+            }
+        } else {
+            if (Y.right.equals(X)){
+                rotateLeft(Z);
+                return Y;
+            } else {
+                rotateRight(Y);
+                rotateLeft(Z);
+                return X;
+            }
+        }
     }
-
 }
 
