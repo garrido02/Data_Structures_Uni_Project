@@ -1,3 +1,5 @@
+package RedeFerroviaria;
+
 /**
  * Interface Line
  * @Authors Francisco Correia 67264 & Sérgio Garrido 67202
@@ -5,7 +7,6 @@
 
 
 
-package RedeFerroviaria;
 import Exceptions.*;
 import dataStructures.*;
 import java.io.Serializable;

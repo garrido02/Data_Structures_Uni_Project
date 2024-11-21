@@ -28,14 +28,8 @@ public interface Train extends Comparable<Train>, Serializable {
      */
     Date getDepartureTime();
 
-    /**
-     * Checks if the current train stops in a given station
-     * @param startingStation - The name of the station
-     * @return true if the station is on the train's path. Otherwise, false
-     */
-
-    boolean isStartingStation(String startingStation);
     Iterator<Entry<String, Date>> scheduleIterator();
+    Station getStartingStation();
 }
 
 /**

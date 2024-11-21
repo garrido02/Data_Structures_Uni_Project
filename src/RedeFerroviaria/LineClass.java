@@ -30,8 +30,6 @@ public class LineClass implements LineUpdatable{
     // Map of stations K - Name of station; V - Station
     private Dictionary<String, Station> stations;
 
-
-
     static final long serialVersionUID = 0L;
 
     /**
@@ -45,10 +43,10 @@ public class LineClass implements LineUpdatable{
     }
 
     @Override
-    public void addStation(String station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
-        StationUpdatable s = new StationClass(station);
+    public void addStation(Station station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
+        StationUpdatable s = (StationUpdatable) station;
         s.insertLine(this.name);
-        stations.insert(station, s);
+        stations.insert(station.getName(), s);
         stationsByInsertion.addLast(s);
     }
 
@@ -247,23 +245,31 @@ public class LineClass implements LineUpdatable{
             Entry<Date, Train> entry = ite.next();
             Date d = entry.getKey();
             Train t = entry.getValue();
-            Iterator<Entry<Date, Train>> ite2 = currentStation.trainsIterator();;
+            Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> ite2 = currentStation.trainsIterator();;
             if (starterDate != d && Date.calculateDiff(starterDate, d) < 0){
                 while (ite2.hasNext() && !result){
-                    Entry<Date, Train> entry2 = ite2.next();
+                    Entry<Date, OrderedDictionary<Integer, Train>> entry2 = ite2.next();
                     Date d2 = entry2.getKey();
-                    Train t2 = entry2.getValue();
-                    if (t2.equals(t) && Date.calculateDiff(currentdDate, d2) > 0){
-                        result = true;
+                    Iterator<Entry<Integer, Train>> trainIte = entry2.getValue().iterator();
+                    while (trainIte.hasNext() && !result){
+                        Entry<Integer, Train> entry3 = trainIte.next();
+                        Train t2 = entry3.getValue();
+                        if (t2.equals(t) && Date.calculateDiff(currentdDate, d2) > 0){
+                            result = true;
+                        }
                     }
                 }
             } else if (starterDate != d && Date.calculateDiff(starterDate, d) > 0){
                 while (ite2.hasNext() && !result){
-                    Entry<Date, Train> entry2 = ite2.next();
+                    Entry<Date, OrderedDictionary<Integer, Train>> entry2 = ite2.next();
                     Date d2 = entry2.getKey();
-                    Train t2 = entry2.getValue();
-                    if (t2.equals(t) && Date.calculateDiff(currentdDate, d2) < 0){
-                        result = true;
+                    Iterator<Entry<Integer, Train>> trainIte = entry2.getValue().iterator();
+                    while (trainIte.hasNext() && !result){
+                        Entry<Integer, Train> entry3 = trainIte.next();
+                        Train t2 = entry3.getValue();
+                        if (t2.equals(t) && Date.calculateDiff(currentdDate, d2) > 0){
+                            result = true;
+                        }
                     }
                 }
             }

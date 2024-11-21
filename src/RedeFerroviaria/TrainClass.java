@@ -50,13 +50,13 @@ public class TrainClass implements TrainUpdatable {
     }
 
     @Override
-    public boolean isStartingStation(String startingStation) {
-        return departureStation.getName().equalsIgnoreCase(startingStation);
+    public Iterator<Entry<String, Date>> scheduleIterator() {
+        return schedule.iterator();
     }
 
     @Override
-    public Iterator<Entry<String, Date>> scheduleIterator() {
-        return schedule.iterator();
+    public Station getStartingStation() {
+        return departureStation;
     }
 
     @Override

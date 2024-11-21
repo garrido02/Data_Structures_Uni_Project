@@ -62,7 +62,7 @@ public class StationClass implements StationUpdatable {
     }
 
     @Override
-    public void removeSchedule(String hour, Train t) throws EmptyTreeException, FullStackException {
+    public void removeSchedule(String hour, Train t) throws EmptyStackException, EmptyTreeException, EmptyQueueException, FullStackException, FullQueueException {
         Date d = new DateClass(hour);
         Iterator<Entry<Integer, Train>> ite = scheduleTree.find(d).iterator();
          while (ite.hasNext()) {
@@ -81,17 +81,11 @@ public class StationClass implements StationUpdatable {
 
     @Override
     public void addSchedule(Train t, Date departure) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
-        Train train = scheduleTree.find(departure);
-        scheduleTree.insert(departure, train);
-    }
-
-    @Override
-    public void removeSchedule(String hour, Train t) {
-        Date d = new DateClass(hour);
-        Train train = scheduleTree.find(d);
-        if (train.equals(t)){
-            scheduleTree.remove(d);
+        OrderedDictionary<Integer, Train> dict = scheduleTree.find(departure);
+        if (dict == null) {
+            dict = new AVLTree<>();
         }
+        dict.insert(t.getNr(), t);
     }
 
     @Override

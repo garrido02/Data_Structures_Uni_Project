@@ -17,7 +17,7 @@ public interface LineUpdatable extends Line {
      * Adds a station to the line
      * @param station - The name of the station
      */
-    void addStation(String station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void addStation(Station station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Adds a train schedule to the line

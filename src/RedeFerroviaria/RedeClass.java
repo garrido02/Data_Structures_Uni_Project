@@ -102,7 +102,7 @@ public class RedeClass implements Rede{
         LineUpdatable l = (LineUpdatable) lines.find(line);
         if (l != null){
             while (ite.hasNext()){
-                String s = ite.next();
+                Station s = new StationClass(ite.next());
                 l.addStation(s);
             }
         }
