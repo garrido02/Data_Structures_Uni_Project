@@ -24,7 +24,7 @@ public interface LineUpdatable extends Line {
      * @param trainNr - The number of the train to be added
      * @param stations - The list of stations on the route of the train
      */
-    void addSchedule(int trainNr, List<Entry<String, String>> stations) throws EmptyTreeException;
+    void addSchedule(int trainNr, List<Entry<String, String>> stations) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Removes a train schedule from a given line which departures at a given station at a given hour

@@ -29,9 +29,8 @@ public class TrainClass implements TrainUpdatable {
     /**
      * Constructor
      * @param nr - The number of the train
-     * @param schedule - The route of the train
      */
-    public TrainClass(int nr, List<Entry<String, Date>> schedule){
+    public TrainClass(int nr){
         this.nr = nr;
     }
 

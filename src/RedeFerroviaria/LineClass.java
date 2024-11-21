@@ -4,7 +4,7 @@
  */
 
 package RedeFerroviaria;
-import Exceptions.EmptyTreeException;
+import Exceptions.*;
 import dataStructures.*;
 import Enums.Constants;
 
@@ -61,27 +61,37 @@ public class LineClass implements LineUpdatable{
     }
 
     @Override
-    public void addSchedule(int trainNr,List<Entry<String, String>> stationsToAdd) throws EmptyTreeException {
+    public void addSchedule(int trainNr,List<Entry<String, String>> stationsToAdd) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         Iterator<Entry<String, String>> ite = stationsToAdd.iterator();
-        String startingStation = stationsToAdd.getFirst().getKey();
 
-        List<Entry<String, Date>> trainSchedule = new DoubleList<>();
+
+        String startingStation = stationsToAdd.getFirst().getKey();
+        String hour = stationsToAdd.getFirst().getValue();
+
+        Date departureTime = new DateClass(hour);
+        Station station = stations.find(startingStation);
+
+        // Handle Train
+        TrainUpdatable t = new TrainClass(trainNr);
+        t.setDepartureStation(station);
+        t.setDepartureTime(departureTime);
+        trains.insert(trainNr, t);
+
+        // Handle insertions
+        if (station.getName().equalsIgnoreCase(stationsByInsertion.getFirst().getName())){
+            departureTerminal1.insert(departureTime, t);
+        } else {
+            departureTerminal2.insert(departureTime, t);
+        }
+
+        // Handle stations schedule insertions
         while (ite.hasNext()){
             Entry<String, String> nextEntry = ite.next();
             String stationName = nextEntry.getKey();
             Date time = new DateClass(nextEntry.getValue());
 
-            trainSchedule.addLast(new EntryClass<>(stationName, time));
-            StationUpdatable s = (StationUpdatable) stations.find(stationName);
-            Train t = new TrainClass(trainNr, trainSchedule);
+            StationUpdatable s = (StationUpdatable) stations.find(stationName);;
             s.addSchedule(t, time);
-            trains.insert(trainNr, t);
-        }
-
-        List<Train> trainList = trainsByTerminal.find(startingStation);
-        if (trainList == null){
-            trainList = new DoubleList<>();
-            trainsByTerminal.insert(startingStation, trainList);
         }
     }
 
