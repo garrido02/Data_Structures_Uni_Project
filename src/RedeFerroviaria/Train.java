@@ -6,6 +6,9 @@
 
 
 package RedeFerroviaria;
+import dataStructures.Entry;
+import dataStructures.Iterator;
+
 import java.io.Serializable;
 
 
@@ -32,6 +35,7 @@ public interface Train extends Comparable<Train>, Serializable {
      */
 
     boolean isStartingStation(String startingStation);
+    Iterator<Entry<String, Date>> scheduleIterator();
 }
 
 /**

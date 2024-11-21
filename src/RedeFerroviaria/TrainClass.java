@@ -5,13 +5,11 @@
 
 
 package RedeFerroviaria;
-import Exceptions.EmptyTreeException;
-import Exceptions.NoTrainsException;
+
+
 import dataStructures.Entry;
 import dataStructures.Iterator;
 import dataStructures.List;
-import Enums.Constants;
-
 
 /**
  * Class Train responsible to implement the prototyped methods in the Train interface
@@ -23,6 +21,7 @@ public class TrainClass implements TrainUpdatable {
     private int nr;
     private Station departureStation;
     private Date departureTime;
+    private List<Entry<String, Date>> schedule;
 
     static final long serialVersionUID = 0L;
 
@@ -56,13 +55,24 @@ public class TrainClass implements TrainUpdatable {
     }
 
     @Override
+    public Iterator<Entry<String, Date>> scheduleIterator() {
+        return schedule.iterator();
+    }
+
+    @Override
     public void setDepartureTime(Date time) {
         departureTime = time;
     }
 
+
     @Override
     public void setDepartureStation(Station station) {
         departureStation = station;
+    }
+
+    @Override
+    public void setSchedule(List<Entry<String, Date>> trainSchedule) {
+        schedule = trainSchedule;
     }
 }
 

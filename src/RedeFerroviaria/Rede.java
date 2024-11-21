@@ -10,6 +10,8 @@ import Exceptions.*;
 import dataStructures.Entry;
 import dataStructures.Iterator;
 import dataStructures.List;
+import dataStructures.OrderedDictionary;
+
 import java.io.Serializable;
 
 
@@ -27,11 +29,12 @@ public interface Rede extends Serializable {
 
     /**
      * Returns an iterator of Objects of type Train corresponding to the trains of a given line that start a given station
-     * @param line - The name of the line
+     *
+     * @param line            - The name of the line
      * @param startingStation - The name of the station
      * @return an iterator of Objects of type String corresponding to the stations of a given line
      */
-    Iterator<Train> scheduleByLineIterator(String line, String startingStation) throws NoLinesException, NotStartingStationException;
+    Iterator<Entry<Date, Train>> scheduleByLineIterator(String line, String startingStation) throws NoLinesException, NotStartingStationException, EmptyTreeException, FullStackException;
 
     /**
      * Finds the train that best suits a given arrival time in a station of a given line
@@ -41,39 +44,38 @@ public interface Rede extends Serializable {
      * @param hour - The expected hour of arrival
      * @return an Object of type Train corresponding to the train that best suits a given arrival time in a station of a given line
      */
-    Train bestTimeTable(String line, String startingStation, String endingStation, String hour) throws NoLinesException, NotStartingStationException, NotPossibleException, EmptyTreeException;
+    Train bestTimeTable(String line, String startingStation, String endingStation, String hour) throws NoLinesException, NotStartingStationException, NotPossibleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Insert new Object of type Line to the system
      * @param line - The name of a line
      * @throws LineAlreadyExistsException - The line already exists
      */
-    void insertLine(String line) throws LineAlreadyExistsException, EmptyTreeException;
+    void insertLine(String line) throws LineAlreadyExistsException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Insert a station to a given line corresponding to an Object of type Line
      * @param line - The name of the line
      * @param aux - The list of stations to be added to a given Line
      */
-    void addStationToLine(String line, List<String> aux) throws EmptyTreeException;
+    void addStationToLine(String line, List<String> aux) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Removes an Object of type Line from the system
      * @param line - The name of the line
      * @throws NoLinesException - The line does not exist in the system
      */
-    void removeLine(String line) throws NoLinesException;
+    void removeLine(String line) throws NoLinesException, EmptyStackException, EmptyTreeException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Removes a train schedule from a given line which departures at a given station at a given hour
      * @param line - The name of the line
      * @param startingStation - The name of the departure station
      * @param hour - The hour of departure
-     * @return true if the removal was successful. Otherwise, false
      * @throws NoLinesException - The line does not exist in the system
      * @throws NonExistantScheduleException - The schedule does not exist in the system
      */
-    boolean removeSchedule(String line, String startingStation, String hour) throws NoLinesException, NonExistantScheduleException, EmptyTreeException;
+    void removeSchedule(String line, String startingStation, String hour) throws NoLinesException, NonExistantScheduleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Inserts a train schedule in a given line
@@ -83,11 +85,11 @@ public interface Rede extends Serializable {
      * @throws NoLinesException - The line does not exist in the system
      * @throws InvalidScheduleException - The schedule does not exist in the system
      */
-    void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException, EmptyTreeException;
+    void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
-    Iterator<Entry<String,Line>> stationLines(String station) throws StationDoesNotExistException;
+    Iterator<Entry<String, Void>> stationLines(String station) throws StationDoesNotExistException;
 
-    Iterator<Entry<Date, Train>> stationTrains(String station) throws StationDoesNotExistException;
+    Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> stationTrains(String station) throws StationDoesNotExistException;
 }
 
 /**

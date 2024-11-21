@@ -92,6 +92,7 @@ public class AVLTree<K extends Comparable<K>, V>
      {
          V valueToReturn = null;
          AVLNode<Entry<K,V>> node = (AVLNode<Entry<K, V>>) findNode(key);
+         AVLNode<Entry<K,V>> parent = (AVLNode<Entry<K, V>>) node.parent;
          valueToReturn = node.element.getValue();
 
          if (node.left == null && node.right == null) {
@@ -107,7 +108,7 @@ public class AVLTree<K extends Comparable<K>, V>
          }
 
          currentSize--;
-         rebalance((AVLNode<Entry<K, V>>) node.getParent());
+         rebalance(parent);
          return valueToReturn;
     }
 

@@ -46,14 +46,22 @@ public class Main {
     private static void stationLines(Scanner in, Rede rede) {
         String station = in.nextLine().trim();
         try {
-            Iterator<Entry<String, Line>> ite = rede.stationLines(station);
+            Iterator<Entry<String, Void>> ite = rede.stationLines(station);
             while (ite.hasNext()){
-                Line l = ite.next().getValue();
-                System.out.printf(Outputs.STRING.getString(), l.getName());
+                String s = ite.next().getKey();
+                System.out.printf(Outputs.STRING.getString(), s);
             }
         } catch (StationDoesNotExistException e){
             System.out.println(Outputs.NONEXISTANT_STATION.getString());
         } catch (EmptyTreeException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
             throw new RuntimeException(e);
         }
     }
@@ -61,18 +69,26 @@ public class Main {
     private static void stationTrains(Scanner in, Rede rede){
         String station = in.nextLine();
         try{
-            Iterator<Entry<Date, List<Train>>> ite = rede.stationTrains(station);
+            Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> ite = rede.stationTrains(station);
             while (ite.hasNext()){
-                List<Train> trainList = ite.next().getValue();
-                Iterator<Train> trainIte = trainList.iterator();
+                Entry<Date, OrderedDictionary<Integer, Train>> entry = ite.next();
+                Iterator<Entry<Integer, Train>> trainIte = entry.getValue().iterator();
                 while (trainIte.hasNext()){
-                    Train t = trainIte.next();
-                    System.out.printf(Outputs.TRAIN_HOUR.getString(), t.getNr(), t.getDepartureTime());
+                    Train t = trainIte.next().getValue();
+                    System.out.printf(Outputs.TRAIN_HOUR.getString(), t.getNr(), entry.getKey());
                 }
             }
         } catch (StationDoesNotExistException e){
             System.out.println(Outputs.NONEXISTANT_STATION.getString());
         } catch (EmptyTreeException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
             throw new RuntimeException(e);
         }
     }
@@ -104,6 +120,14 @@ public class Main {
             System.out.println(Outputs.EXISTANT_LINE.getString());
         } catch (EmptyTreeException e) {
             throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -119,6 +143,16 @@ public class Main {
             System.out.println(Outputs.REMOVE_LINE_OK.getString());
         } catch (NoLinesException e){
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyTreeException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -139,6 +173,14 @@ public class Main {
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
         } catch (EmptyTreeException e) {
             throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -149,7 +191,6 @@ public class Main {
      */
     private static void insertSchedule(Scanner in, Rede rede) {
         String line = in.nextLine().trim();
-
         int trainNr = in.nextInt();
         in.nextLine();
         boolean end = false;
@@ -176,6 +217,14 @@ public class Main {
             System.out.println(Outputs.INVALID_SCHEDULE.getString());
         } catch (EmptyTreeException e) {
             throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -201,6 +250,14 @@ public class Main {
             System.out.println(Outputs.NONEXISTANT_SCHEDULE.getString());
         } catch (EmptyTreeException e) {
             throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -214,26 +271,34 @@ public class Main {
         String startingStation = in.nextLine().trim();
 
         try {
-            Iterator<Train> ite = rede.scheduleByLineIterator(line, startingStation);
-            if (ite != null){
+            Iterator<Entry<Date, Train>> ite = rede.scheduleByLineIterator(line, startingStation);
+            if (ite != null) {
                 while (ite.hasNext()) {
-                    Train t = ite.next();
+                    Train t = ite.next().getValue();
+                    Iterator<Entry<String, Date>> trainIte = t.scheduleIterator();
                     System.out.printf("%d\n", t.getNr());
-                    Iterator<Entry<String, Date>> scheduleIte = t.scheduleIterator();
-                    while (scheduleIte.hasNext()) {
-                        Entry<String, Date> entry = scheduleIte.next();
+                    while (trainIte.hasNext()) {
+                        Entry<String, Date> entry = trainIte.next();
                         System.out.printf(Outputs.STATION_HOUR.getString(), entry.getKey(), entry.getValue().getHour(), entry.getValue().getMinutes());
+
                     }
                 }
             }
-        } catch (NoLinesException e){
+    } catch (NoLinesException e){
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
         } catch (NotStartingStationException e){
             System.out.println(Outputs.NONEXISTANT_START_STATION.getString());
-        } catch (NoTrainsException ignored){} catch (EmptyTreeException e) {
+        } catch (EmptyTreeException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
             throw new RuntimeException(e);
         }
-        ;
     }
 
     /**
@@ -263,9 +328,17 @@ public class Main {
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
         } catch (NotStartingStationException e){
             System.out.println(Outputs.NONEXISTANT_START_STATION.getString());
-        } catch (NotPossibleException | NoTrainsException e){
+        } catch (NotPossibleException e){
             System.out.println(Outputs.IMPOSSIBLE_ROUTE.getString());
         } catch (EmptyTreeException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyStackException e) {
+            throw new RuntimeException(e);
+        } catch (EmptyQueueException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
+        } catch (FullQueueException e) {
             throw new RuntimeException(e);
         }
     }

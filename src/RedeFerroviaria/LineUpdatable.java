@@ -17,7 +17,7 @@ public interface LineUpdatable extends Line {
      * Adds a station to the line
      * @param station - The name of the station
      */
-    void addStation(String station) throws EmptyTreeException;
+    void addStation(String station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
 
     /**
      * Adds a train schedule to the line
@@ -30,9 +30,10 @@ public interface LineUpdatable extends Line {
      * Removes a train schedule from a given line which departures at a given station at a given hour
      * @param startingStation - The name of the departure station
      * @param hour - The hour of departure
-     * @return true if the removal was successful. Otherwise, false
      */
-    boolean removeSchedule(String startingStation, String hour) throws EmptyTreeException;
+    void removeSchedule(String startingStation, String hour) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+
+    void removeLineFromStations() throws EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException;
 }
 
 /**

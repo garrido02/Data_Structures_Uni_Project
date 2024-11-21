@@ -48,7 +48,7 @@ public class RedeClass implements Rede{
      * @param hour - The hour of the schedule
      * @return true if a given line has a train that stops at a given station at a given hour. Otherwise, false
      */
-    private boolean hasSchedule(String line, String startingStation, String hour) throws EmptyTreeException {
+    private boolean hasSchedule(String line, String startingStation, String hour) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         Line l = lines.find(line);
         return l.hasSchedule(startingStation, hour);
     }
@@ -82,13 +82,13 @@ public class RedeClass implements Rede{
      * @param stations - The list of stations
      * @return true if the order of stations of a given list corresponds to the order of the stations of a given line. Otherwise, false
      */
-    private boolean orderCorrect(String line, List<Entry<String, String>> stations) throws EmptyTreeException {
+    private boolean orderCorrect(String line, List<Entry<String, String>> stations) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         Line l = lines.find(line);
         return l.orderCorrect(stations);
     }
 
     @Override
-    public void insertLine(String line) throws LineAlreadyExistsException, EmptyTreeException {
+    public void insertLine(String line) throws LineAlreadyExistsException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         if (hasLine(line)){
             throw new LineAlreadyExistsException();
         }
@@ -97,7 +97,7 @@ public class RedeClass implements Rede{
     }
 
     @Override
-    public void addStationToLine(String line, List<String> station) throws EmptyTreeException {
+    public void addStationToLine(String line, List<String> station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         Iterator<String> ite = station.iterator();
         LineUpdatable l = (LineUpdatable) lines.find(line);
         if (l != null){
@@ -109,27 +109,28 @@ public class RedeClass implements Rede{
     }
 
     @Override
-    public void removeLine(String line) throws NoLinesException {
+    public void removeLine(String line) throws NoLinesException, EmptyStackException, EmptyTreeException, EmptyQueueException, FullStackException, FullQueueException {
         if (!hasLine(line)){
             throw new NoLinesException();
         }
-        Line l = lines.find(line);
+        LineUpdatable l = (LineUpdatable) lines.find(line);
+        l.removeLineFromStations();
         lines.remove(line);
     }
 
     @Override
-    public boolean removeSchedule(String line, String startingStation, String hour) throws NoLinesException, NonExistantScheduleException, EmptyTreeException {
+    public void removeSchedule(String line, String startingStation, String hour) throws NoLinesException, NonExistantScheduleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         if (!hasLine(line)){
             throw new NoLinesException();
         } else if (!hasSchedule(line, startingStation, hour)){
             throw new NonExistantScheduleException();
         }
         LineUpdatable l = (LineUpdatable) lines.find(line);
-        return l.removeSchedule(startingStation, hour);
+        l.removeSchedule(startingStation, hour);
     }
 
     @Override
-    public void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException, EmptyTreeException {
+    public void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         if (!hasLine(line)){
             throw new NoLinesException();
         } else if (!isStartingStation(line, stations.getFirst().getKey()) || !orderCorrect(line, stations)){
@@ -140,7 +141,7 @@ public class RedeClass implements Rede{
     }
 
     @Override
-    public Iterator<Entry<String, Line>> stationLines(String station) throws StationDoesNotExistException {
+    public Iterator<Entry<String, Void>> stationLines(String station) throws StationDoesNotExistException {
         try {
             Station s = stations.find(station);
             return s.linesIterator();
@@ -148,17 +149,21 @@ public class RedeClass implements Rede{
             throw new StationDoesNotExistException();
         } catch (EmptyTreeException e) {
             throw new RuntimeException(e);
+        } catch (FullStackException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Iterator<Entry<Date, Train>> stationTrains(String station) throws StationDoesNotExistException {
+    public Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> stationTrains(String station) throws StationDoesNotExistException {
         try{
             Station s = stations.find(station);
             return s.trainsIterator();
         } catch (NoSuchElementException e){
             throw new StationDoesNotExistException();
         } catch (EmptyTreeException e) {
+            throw new RuntimeException(e);
+        } catch (FullStackException e) {
             throw new RuntimeException(e);
         }
     }
@@ -173,7 +178,7 @@ public class RedeClass implements Rede{
     }
 
     @Override
-    public Iterator<Train> scheduleByLineIterator(String line, String startingStation) throws NoLinesException, NotStartingStationException {
+    public Iterator<Entry<Date, Train>> scheduleByLineIterator(String line, String startingStation) throws NoLinesException, NotStartingStationException, EmptyTreeException, FullStackException {
         if (!hasLine(line)){
             throw new NoLinesException();
         } else if (!isStartingStation(line, startingStation)){
@@ -184,7 +189,7 @@ public class RedeClass implements Rede{
     }
 
     @Override
-    public Train bestTimeTable(String line, String startingStation, String endingStation, String hour) throws NoLinesException, NotStartingStationException, NotPossibleException, EmptyTreeException {
+    public Train bestTimeTable(String line, String startingStation, String endingStation, String hour) throws NoLinesException, NotStartingStationException, NotPossibleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         if(!hasLine(line)){
             throw new NoLinesException();
         } else if (!isPossible(line, startingStation)){

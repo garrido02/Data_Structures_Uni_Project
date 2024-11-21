@@ -29,8 +29,6 @@ public class LineClass implements LineUpdatable{
     private List<Station> stationsByInsertion;
     // Map of stations K - Name of station; V - Station
     private Dictionary<String, Station> stations;
-    // Map of Trains K - Nr of Train, V - Train
-    private Dictionary<Integer, Train> trains;
 
 
 
@@ -43,14 +41,13 @@ public class LineClass implements LineUpdatable{
     public LineClass(String name){
         this.stations = new SepChainHashTable<>(Constants.DEFAULT_STATIONS.getValue());
         this.stationsByInsertion = new DoubleList<>();
-        this.trains = new SepChainHashTable<>(Constants.DEFAULT_SCHEDULES.getValue());
         this.name = name;
     }
 
     @Override
-    public void addStation(String station) throws EmptyTreeException {
+    public void addStation(String station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         StationUpdatable s = new StationClass(station);
-        s.insertLine(this);
+        s.insertLine(this.name);
         stations.insert(station, s);
         stationsByInsertion.addLast(s);
     }
@@ -75,7 +72,6 @@ public class LineClass implements LineUpdatable{
         TrainUpdatable t = new TrainClass(trainNr);
         t.setDepartureStation(station);
         t.setDepartureTime(departureTime);
-        trains.insert(trainNr, t);
 
         // Handle insertions
         if (station.getName().equalsIgnoreCase(stationsByInsertion.getFirst().getName())){
@@ -84,22 +80,44 @@ public class LineClass implements LineUpdatable{
             departureTerminal2.insert(departureTime, t);
         }
 
+        List<Entry<String, Date>> trainSchedule = new DoubleList<>();
         // Handle stations schedule insertions
         while (ite.hasNext()){
             Entry<String, String> nextEntry = ite.next();
             String stationName = nextEntry.getKey();
             Date time = new DateClass(nextEntry.getValue());
+            trainSchedule.addLast(new EntryClass(stationName, time));
 
             StationUpdatable s = (StationUpdatable) stations.find(stationName);;
             s.addSchedule(t, time);
         }
+        t.setSchedule(trainSchedule);
     }
 
     @Override
-    public boolean hasSchedule(String stationName, String hour) throws EmptyTreeException {
-        Station s = stations.find(stationName);
-        Train t = s.schedule(hour);
-        return t.isStartingStation(stationName);
+    public boolean hasSchedule(String stationName, String hour) throws EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException {
+        Date time = new DateClass(hour);
+
+        if (!isTerminalStation(stationName)){
+            return false;
+        }
+
+        Iterator<Entry<Date, Train>> iterator;
+        if (stationName.equalsIgnoreCase(stationsByInsertion.getFirst().getName())){
+            iterator = departureTerminal1.iterator();
+        } else {
+            iterator = departureTerminal2.iterator();
+        }
+
+        boolean found = false;
+        while (iterator.hasNext() && !found){
+            Entry<Date, Train> entry = iterator.next();
+            Date d = entry.getKey();
+            if (d.equals(time)){
+                found = true;
+            }
+        }
+        return found;
     }
 
     @Override
@@ -108,15 +126,34 @@ public class LineClass implements LineUpdatable{
     }
 
     @Override
-    public boolean removeSchedule(String startingStation, String hour) throws EmptyTreeException {
-        if (!hasStation(startingStation)){
-            return false;
-        }
+    public void removeSchedule(String startingStation, String hour) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         StationUpdatable s = (StationUpdatable) stations.find(startingStation);
-        Train t = s.removeSchedule(hour);
+        Date time = new DateClass(hour);
+        Train t;
 
-        List<Train> trains = trainsByTerminal.find(startingStation);
-        return trains.remove(t);
+        if (startingStation.equalsIgnoreCase(stationsByInsertion.getFirst().getName())){
+            t = departureTerminal1.find(time);
+            departureTerminal1.remove(time);
+        } else {
+            t = departureTerminal1.find(time);
+            departureTerminal2.remove(time);
+        }
+
+        for (int i = 0; i < stationsByInsertion.size(); i++){
+            StationUpdatable station = (StationUpdatable) stationsByInsertion.get(i);
+            station.removeSchedule(hour, t);
+        }
+    }
+
+    @Override
+    public void removeLineFromStations() throws EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException {
+        Iterator<Entry<String, Station>> ite = stations.iterator();
+        while (ite.hasNext()){
+            Entry<String,Station> entry = ite.next();
+            String stationName = entry.getKey();
+            StationUpdatable s = (StationUpdatable) stations.find(stationName);
+            s.removeLine(this.name);
+        }
     }
 
     @Override
@@ -126,7 +163,7 @@ public class LineClass implements LineUpdatable{
 
 
     @Override
-    public boolean orderCorrect(List<Entry<String, String>> stations) throws EmptyTreeException {
+    public boolean orderCorrect(List<Entry<String, String>> stations) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         return stationsInOrder(stations) && hourInOrder(stations);
     }
 
@@ -145,7 +182,7 @@ public class LineClass implements LineUpdatable{
         if (i == ZERO){
             while (i < stationsByInsertion.size() && j < stations.size()){
                 Station s = stationsByInsertion.get(i);
-                if (s.getName().equalsIgnoreCase(stations.get(j).getKey()) && scheduleAvailable(stationsByInsertion.getFirst(), stations.getFirst(), stations.get(j))){
+                if (s.getName().equalsIgnoreCase(stations.get(j).getKey())){
                     i++; j++;
                 } else {
                     i++;
@@ -154,7 +191,7 @@ public class LineClass implements LineUpdatable{
         } else {
             while (i >= ZERO && j < stations.size()){
                 Station s = stationsByInsertion.get(i);
-                if(s.getName().equalsIgnoreCase(stations.get(j).getKey()) && scheduleAvailable(stationsByInsertion.getLast(), stations.getFirst(), stations.get(j))){
+                if(s.getName().equalsIgnoreCase(stations.get(j).getKey())){
                     i--; j++;
                 } else {
                     i--;
@@ -164,47 +201,72 @@ public class LineClass implements LineUpdatable{
         return j == stations.size();
     }
 
-    private boolean scheduleAvailable(Station starter, Entry<String, String> firstEntry, Entry<String, String> currentEntry) throws EmptyTreeException {
-        Station current = stations.find(currentEntry.getKey());
-        Train train = current.schedule(currentEntry.getValue());
-        Date startingDate = new DateClass(firstEntry.getValue());
-        Date currentDate = new DateClass(currentEntry.getValue());
-        return !train.isStartingStation(starter.getName()) && !hasOvercome(train, startingDate, currentDate, current);
-    }
-
-    private boolean hasOvercome(Train t, Date startingDate, Date currentDate, Station current){
-        Date currentStationDate = current.getTrainSchedule(t.getNr());
-        int resultStarter = Date.calculateDiff(t.getDepartureTime(), startingDate);
-        int resultCurrent = Date.calculateDiff(currentStationDate, currentDate);
-        if (resultStarter < 0 && resultCurrent < 0 || resultStarter > 0 && resultCurrent > 0){
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Checks if a given route has the hour of departure in each station in crescent order
      * @param stations - The list of stations
      * @return true if the list of stations have their departure hour in crescent order. Otherwise, false
      */
-    private boolean hourInOrder(List<Entry<String, String>> stations) throws EmptyTreeException {
+    private boolean hourInOrder(List<Entry<String, String>> stations) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
+        Station starter = this.stations.find(stations.getFirst().getKey());
+        Date starterDate = new DateClass(stations.getFirst().getValue());
+
         Iterator<Entry<String, String>> ite = stations.iterator();
         boolean result = true;
         Date prev = null;
         while (ite.hasNext() && result){
             Entry<String, String> entry = ite.next();
-            Date date = new DateClass(entry.getValue());
+            Date currentDate = new DateClass(entry.getValue());
+            Station currentStation = this.stations.find(entry.getKey());
             if (prev != null){
-                int hour =  date.getHour() - prev.getHour();
+                int hour =  currentDate.getHour() - prev.getHour();
                 if (hour == ZERO){
-                    int minute = date.getMinutes() - prev.getMinutes();
+                    int minute = currentDate.getMinutes() - prev.getMinutes();
                     result = minute >= ONE;
                 } else {
                     result = hour >= ONE;
                 }
             }
-            prev = date;
+            if (hasOvercome(starter, starterDate, currentStation, currentDate)){
+                result = false;
+            }
+            prev = currentDate;
+        }
+        return result;
+    }
+
+    private boolean hasOvercome(Station starter, Date starterDate, Station currentStation, Date currentdDate) throws EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException {
+        Iterator<Entry<Date,Train>> ite;
+        boolean result = false;
+        if (starter.getName().equalsIgnoreCase(stationsByInsertion.getFirst().getName())){
+            ite = departureTerminal1.iterator();
+        } else {
+            ite = departureTerminal2.iterator();
+        }
+        while (ite.hasNext() && !result){
+            Entry<Date, Train> entry = ite.next();
+            Date d = entry.getKey();
+            Train t = entry.getValue();
+            Iterator<Entry<Date, Train>> ite2 = currentStation.trainsIterator();;
+            if (starterDate != d && Date.calculateDiff(starterDate, d) < 0){
+                while (ite2.hasNext() && !result){
+                    Entry<Date, Train> entry2 = ite2.next();
+                    Date d2 = entry2.getKey();
+                    Train t2 = entry2.getValue();
+                    if (t2.equals(t) && Date.calculateDiff(currentdDate, d2) > 0){
+                        result = true;
+                    }
+                }
+            } else if (starterDate != d && Date.calculateDiff(starterDate, d) > 0){
+                while (ite2.hasNext() && !result){
+                    Entry<Date, Train> entry2 = ite2.next();
+                    Date d2 = entry2.getKey();
+                    Train t2 = entry2.getValue();
+                    if (t2.equals(t) && Date.calculateDiff(currentdDate, d2) < 0){
+                        result = true;
+                    }
+                }
+            }
         }
         return result;
     }
@@ -215,36 +277,37 @@ public class LineClass implements LineUpdatable{
     }
 
     @Override
-    public Iterator<Train> trainsPerStationsIterator(String startingStation){
-        List<Train> trainList = trainsByTerminal.find(startingStation);
-        if (trainList == null){
-            return null;
+    public Iterator<Entry<Date, Train>> trainsPerStationsIterator(String startingStation) throws EmptyTreeException, FullStackException {
+        Iterator<Entry<Date, Train>> ite;
+        if (stationsByInsertion.getFirst().getName().equalsIgnoreCase(startingStation)){
+            ite = departureTerminal1.iterator();
+        } else {
+            ite = departureTerminal2.iterator();
         }
-        return trainList.iterator();
+        return ite;
     }
 
     @Override
-    public Train bestTimeTable(String startingStation, String endingStation, String hour) throws EmptyTreeException {
+    public Train bestTimeTable(String startingStation, String endingStation, String hour) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         Date arrivalTime = new DateClass(hour);
-        int idxStarter = stationsByInsertion.find(stations.find(startingStation));
-        int idxEnding = stationsByInsertion.find(stations.find(endingStation));
-        boolean insertionDirection = idxStarter < idxEnding;
-        Iterator<Train> trainIte;
-        if (insertionDirection){
-            trainIte = trainsByTerminal.find(stationsByInsertion.getFirst().getName()).iterator();
+        Iterator<Entry<Date, Train>> ite;
+        if (startingStation.equalsIgnoreCase(stationsByInsertion.getFirst().getName())){
+            ite = departureTerminal1.iterator();
         } else {
-            trainIte = trainsByTerminal.find(stationsByInsertion.getLast().getName()).iterator();
+            ite = departureTerminal2.iterator();
         }
 
         Station starter = stations.find(startingStation);
         Station ender = stations.find(endingStation);
         Train bestSuited = null;
         int leeway = Integer.MAX_VALUE;
-        while(trainIte.hasNext()){
-            Train t = trainIte.next();
-            int trainNr = t.getNr();
-            if (starter.hasTrain(trainNr) && ender.hasTrain(trainNr)){
-                int r = Date.calculateDiff(ender.getTrainSchedule(trainNr), arrivalTime);
+        while(ite.hasNext()){
+            Entry<Date, Train> entry = ite.next();
+            Train t = entry.getValue();
+
+            // Ver se ambas as estações têem este comboio
+            if (starter.hasTrain(t) && ender.hasTrain(t)){
+                int r = Date.calculateDiff(ender.getTrainSchedule(t), arrivalTime);
                 if (r < leeway){
                     leeway = r;
                     bestSuited = t;

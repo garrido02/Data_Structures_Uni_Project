@@ -1,20 +1,18 @@
 package RedeFerroviaria;
-import Enums.Constants;
-import Exceptions.EmptyTreeException;
-import Exceptions.FullStackException;
+
+
+import Exceptions.*;
 import dataStructures.*;
 
-public class StationClass implements StationUpdatable{
+
+public class StationClass implements StationUpdatable {
     private String name;
 
     // Lines Tree
-    private OrderedDictionary<String, Line> linesTree;
+    private OrderedDictionary<String, Void> linesTree;
 
     // Train date tree K - Date, V - Train number
-    private OrderedDictionary<Date, Train> scheduleTree;
-
-    // Map K - Train nr; V - Date
-    private Dictionary<Integer, Date> trainsByDate;
+    private OrderedDictionary<Date, OrderedDictionary<Integer, Train>> scheduleTree;
 
     static final long serialVersionUID = 0L;
 
@@ -23,14 +21,6 @@ public class StationClass implements StationUpdatable{
         this.name = name;
         this.linesTree = new AVLTree<>();
         this.scheduleTree = new AVLTree<>();
-        this.trainsByDate = new SepChainHashTable<>(Constants.DEFAULT_SCHEDULES.getValue());
-    }
-
-
-    @Override
-    public Train schedule(String date) {
-        Date d = new DateClass(date);
-        return scheduleTree.find(d);
     }
 
     @Override
@@ -39,47 +29,74 @@ public class StationClass implements StationUpdatable{
     }
 
     @Override
-    public Iterator<Entry<String, Line>> linesIterator() throws EmptyTreeException, FullStackException {
+    public Iterator<Entry<String, Void>> linesIterator() throws EmptyTreeException, FullStackException {
         return linesTree.iterator();
     }
 
     @Override
-    public Iterator<Entry<Date, Train>> trainsIterator() throws EmptyTreeException {
+    public Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> trainsIterator() throws EmptyTreeException, FullStackException {
         return scheduleTree.iterator();
     }
 
     @Override
-    public Date getTrainSchedule(int trainNr) {
-        return trainsByDate.find(trainNr);
+    public boolean hasTrain(Train train) throws EmptyStackException, EmptyTreeException, EmptyQueueException, FullStackException, FullQueueException {
+        return getTrainSchedule(train) != null;
     }
 
     @Override
-    public boolean hasTrain(int trainNr){
-        return trainsByDate.find(trainNr) != null;
-    }
-
-    @Override
-    public Train removeSchedule(String hour) {
-        Date d = new DateClass(hour);
-        Train t = scheduleTree.find(d);
-        if (t.isStartingStation(name)){
-            trainsByDate.remove(t.getNr());
+    public Date getTrainSchedule(Train t) throws EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException {
+        Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> ite = scheduleTree.iterator();
+        Date result = null;
+        boolean found = false;
+        while (ite.hasNext() && !found) {
+            Date d = ite.next().getKey();
+            Iterator<Entry<Integer,Train>> ite2 = ite.next().getValue().iterator();
+            while (ite2.hasNext() && !found) {
+                if (ite2.next().getValue().equals(t)){
+                    found = true;
+                    result = d;
+                }
+            }
         }
-        return t;
+        return result;
+    }
+
+    @Override
+    public void removeSchedule(String hour, Train t) throws EmptyTreeException, FullStackException {
+        Date d = new DateClass(hour);
+        Iterator<Entry<Integer, Train>> ite = scheduleTree.find(d).iterator();
+         while (ite.hasNext()) {
+             Entry<Integer, Train> entry = ite.next();
+             if (t.equals(entry.getValue())) {
+                 scheduleTree.find(d).remove(entry.getKey());
+             }
+         }
     }
 
 
     @Override
-    public void insertLine(Line line) throws EmptyTreeException {
-        linesTree.insert(line.getName(), line);
+    public void insertLine(String lineName) throws EmptyStackException, EmptyTreeException, EmptyQueueException, FullStackException, FullQueueException {
+        linesTree.insert(lineName, null);
     }
 
     @Override
-    public void addSchedule(Train t, Date departure) throws EmptyTreeException {
+    public void addSchedule(Train t, Date departure) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
         Train train = scheduleTree.find(departure);
-        int nr = t.getNr();
         scheduleTree.insert(departure, train);
-        trainsByDate.insert(nr, departure);
+    }
+
+    @Override
+    public void removeSchedule(String hour, Train t) {
+        Date d = new DateClass(hour);
+        Train train = scheduleTree.find(d);
+        if (train.equals(t)){
+            scheduleTree.remove(d);
+        }
+    }
+
+    @Override
+    public void removeLine(String name) {
+        linesTree.remove(name);
     }
 
     @Override
