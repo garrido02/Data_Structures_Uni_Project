@@ -92,13 +92,36 @@ public class AVLTree<K extends Comparable<K>, V>
      {
          V valueToReturn = null;
          AVLNode<Entry<K,V>> node = (AVLNode<Entry<K, V>>) findNode(key);
-         if (node != null){
-             valueToReturn = node.element.getValue();
-             node = (AVLNode<Entry<K, V>>) node.parent;
-             remove(key);
-             currentSize--;
-             rebalance(node);
+         valueToReturn = node.element.getValue();
+
+         if (node.left == null && node.right == null) {
+             replaceNode(node, null);
+         }  else if (node.left == null) {
+             replaceNode(node, (AVLNode<Entry<K, V>>) node.right);
+         } else if (node.right == null) {
+             replaceNode(node, (AVLNode<Entry<K, V>>) node.left);
+         } else {
+             AVLNode<Entry<K, V>> successor = (AVLNode<Entry<K, V>>) minNode(node.right);
+             node.element = successor.element;
+             replaceNode(successor, (AVLNode<Entry<K, V>>) successor.right);
          }
+
+         currentSize--;
+         rebalance((AVLNode<Entry<K, V>>) node.getParent());
          return valueToReturn;
+    }
+
+
+    private void replaceNode(AVLNode<Entry<K, V>> node, AVLNode<Entry<K, V>> child) {
+        if (node.getParent() == null) {
+            root = child;
+        } else if (node == node.getParent().left) {
+            node.getParent().setLeft(child);
+        } else {
+            node.getParent().setRight(child);
+        }
+        if (child != null) {
+            child.setParent(node.getParent());
+        }
     }
 }
