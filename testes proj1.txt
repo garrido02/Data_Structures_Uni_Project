@@ -91,11 +91,32 @@ b 11:58
 c 13:00
 
 Inserção de linha com sucesso.
-
+Criação de horário com sucesso.
 Horário inválido.
 
 ----------------------------------------
+il line01
+1
+2
+3
 
+ih line01
+1
+1 09:00
+2 09:10
+3 09:20
+
+ih line01
+2
+3 09:00
+2 09:10
+1 09:20
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+----------------------------------------
 
 il fct
 a
