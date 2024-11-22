@@ -1,0 +1,667 @@
+il fct
+a
+b
+c
+
+il fct
+a
+b
+c
+
+
+Inserção de linha com sucesso.
+Linha existente.
+------------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+a 10:00
+b 11:11
+c 12:12
+
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+--------------------------------------
+
+
+il fct
+a
+b
+c
+
+ih fct
+1
+a 11:00
+b 10:11
+c 12:12
+
+
+Inserção de linha com sucesso.
+Horário inválido.
+
+
+---------------------------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+a 11:00
+b 12:00
+c 13:00
+
+ih fct
+2
+a 10:58
+b 12:01
+c 13:00
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Horário inválido.
+
+----------------------------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+a 11:00
+b 12:00
+c 13:00
+
+ih fct
+2
+a 11:01
+b 11:58
+c 13:00
+
+Inserção de linha com sucesso.
+
+Horário inválido.
+
+----------------------------------------
+
+
+il fct
+a
+b
+c
+
+ih fct
+1
+b 10:00
+a 11:11
+c 12:12
+
+
+Inserção de linha com sucesso.
+Horário inválido.
+------------------------------
+
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+b 11:11
+a 12:12
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+-----------
+
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+a 12:12
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+
+-------------------
+
+
+il fct
+a
+b
+c
+d
+
+ih fct
+1
+a 10:00
+d 11:00
+c 12:00
+
+
+
+Inserção de linha com sucesso.
+Horário inválido.
+--------------------------
+
+
+il fct
+a
+b
+c
+d
+
+ih fct
+1
+a 10:00
+c 11:00
+d 12:00
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+
+---------------------------
+
+
+il fct
+a
+b
+c
+d
+
+ih fct
+1
+d 10:00
+c 11:00
+a 12:00
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+--------------------------
+
+il fct
+a
+b
+c
+d
+
+ih fct
+1
+c 10:00
+d 11:00
+a 12:00
+
+
+Inserção de linha com sucesso.
+Horário inválido.
+-------------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+b 11:11
+a 12:12
+
+rh fct
+c 10:00
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Remoção de horário com sucesso.
+------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+b 11:11
+a 12:12
+
+rh fct
+c 12:00
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Horário inexistente.
+
+
+------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+b 11:11
+a 12:12
+
+rh fct
+b 11:11
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Horário inexistente.
+----------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+b 11:11
+a 12:12
+
+rh fct
+a 12:12
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Horário inexistente.
+------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:00
+b 11:11
+a 12:12
+
+rh fct
+c 10:00
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Remoção de horário com sucesso.
+
+------------
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:11
+b 11:11
+a 12:12
+
+ih fct
+2
+a 12:00
+b 13:00
+c 14:00
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+--------------------
+
+il fct
+a
+b
+c
+
+ih fct
+1
+c 10:11
+b 11:11
+a 12:12
+
+ih fct
+2
+a 12:00
+b 13:00
+c 14:00
+
+ih fct
+3
+c 09:10
+b 10:10
+a 11:00
+
+ch fct
+c
+
+ch fct
+a
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+3
+c 09:10
+b 10:10
+a 11:00
+1
+c 10:11
+b 11:11
+a 12:12
+2
+a 12:00
+b 13:00
+c 14:00
+
+----------------------------------------------------
+
+
+il fct
+a
+b
+c
+d
+e
+f
+
+ih fct
+1
+a 09:00
+b 09:10
+d 09:20
+f 09:30
+
+ih fct
+2
+a 09:05
+d 09:25
+f 09:35
+
+mh fct
+d
+f
+09:40
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+2
+a 09:05
+d 09:25
+f 09:35
+--------------------------------------------
+
+il fct
+a
+b
+c
+d
+e
+f
+
+ih fct
+1
+a 09:00
+b 09:10
+d 09:20
+f 09:30
+
+ih fct
+3
+a 09:15
+d 09:35
+f 09:45
+
+ih fct
+2
+a 09:05
+d 09:25
+f 09:35
+
+mh fct
+d
+f
+09:40
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+2
+a 09:05
+d 09:25
+f 09:35
+-------------------------------
+
+il fct
+a
+b
+c
+d
+
+ih fct
+1
+a 09:10
+b 09:15
+d 09:25
+
+
+ih fct
+2
+a 09:15
+b 09:20
+d 09:30
+
+ih fct
+3
+a 09:20
+b 09:25
+d 09:35
+
+mh fct
+a
+c
+09:30
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+-----------------
+
+IL Linha9
+TerminalQ
+Estacao18
+Estacao19
+TerminalR
+
+IH Linha9
+97531
+TerminalQ 10:00
+Estacao18 10:15
+Estacao18 10:30
+Estacao19 10:45
+TerminalR 11:00
+
+
+Inserção de linha com sucesso.
+Horário inválido.
+------------------------
+
+
+il fct
+a
+b
+c
+d
+f
+
+ih fct
+1
+a 09:10
+b 09:15
+d 09:20
+
+ih fct
+2
+a 09:15
+b 09:20
+d 09:24
+
+ih fct
+3
+a 09:25
+b 09:30
+d 09:35
+
+mh fct
+a
+d 
+09:30
+
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+2
+a 09:15
+b 09:20
+d 09:24
+------------------------------------
+
+il fct
+a
+b
+c
+d
+f
+
+ih fct
+1
+f 09:10
+c 09:15
+b 09:25
+
+ih fct
+2
+f 09:15
+b 09:31
+a 09:32
+
+ih fct
+3
+a 09:29
+b 09:30
+
+mh fct
+f
+b
+09:30
+
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+1
+f 09:10
+c 09:15
+b 09:25
+
+
+------------------------
+
+
+il fct
+a
+b
+c
+d
+f
+
+ih fct
+1
+f 09:10
+c 09:15
+b 09:25
+
+ih fct
+2
+f 09:15
+b 09:31
+a 09:32
+
+ih fct
+3
+a 09:29
+b 09:30
+
+mh fct
+f
+b
+09:30
+
+ch fct
+a
+
+
+Inserção de linha com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+1
+f 09:10
+c 09:15
+b 09:25
+3
+a 09:29
+b 09:30
+
+-------------------------------------------------
+
+
+
