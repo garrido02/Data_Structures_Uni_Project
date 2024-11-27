@@ -1,10 +1,13 @@
 package dataStructures;
 import Exceptions.EmptyStackException;
 
+import java.io.Serial;
+
 public class StackInList<E extends Comparable<E>> implements Stack<E>
 {
 
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 0L;
 
 
     // Memory of the stack: a list.
@@ -49,10 +52,10 @@ public class StackInList<E extends Comparable<E>> implements Stack<E>
 
 
     // Removes and returns the element at the top of the stack.
-    public E pop( ) throws EmptyStackException 
+    public E pop( )
     {     
         if ( list.isEmpty() )
-            throw new EmptyStackException();
+            return null;
 
         return list.removeFirst();
     }

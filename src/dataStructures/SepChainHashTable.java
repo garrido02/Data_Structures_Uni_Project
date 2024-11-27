@@ -1,6 +1,8 @@
 package dataStructures;
 import Exceptions.*;
 
+import java.io.Serial;
+
 /**
  * Separate Chaining Hash table implementation
  * @author AED  Team
@@ -8,14 +10,15 @@ import Exceptions.*;
  * @param <K> Generic Key, must extend comparable
  * @param <V> Generic Value 
  */
-
+@SuppressWarnings("unchecked")
 public class SepChainHashTable<K extends Comparable<K>, V>
     extends HashTable<K,V>
 { 
 	/**
 	 * Serial Version UID of the Class.
 	 */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 0L;
 
 	/**
 	 * The array of dictionaries.
@@ -55,7 +58,7 @@ public class SepChainHashTable<K extends Comparable<K>, V>
      */
     protected int hash( K key )
     {
-        return Math.abs( key.hashCode() ) % table.length;
+        return Math.abs(key.hashCode()) % table.length;
     }
 
     @Override
@@ -65,11 +68,11 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     }
 
     @Override
-    public V insert( K key, V value ) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
+    @SuppressWarnings("unchecked")
+    public V insert( K key, V value ){
         if ( this.isFull() ){
             this.rehash();
         }
-
         V element = table[ this.hash(key) ].find(key);
         if ( element == null ){
             currentSize++;
@@ -79,48 +82,34 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     }
 
     @Override
-    public V remove( K key )
-    {
-        V element = table[ this.hash(key) ].find(key);
-        table[ this.hash(key) ].remove(key);
-        currentSize--;
-        return element;
+    public V remove( K key ) {
+            V element = table[ this.hash(key) ].find(key);
+            table[ this.hash(key) ].remove(key);
+            currentSize--;
+            return element;
     }
 
     @SuppressWarnings("unchecked")
-    private void rehash() throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException {
-        // Calculate new capacity: typically, we double the size and find the next prime.
-        int newCapacity = HashTable.nextPrime((table.length * 2));
-
-        // Create a new table with the updated capacity
-        Dictionary<K, V>[] newTable = (Dictionary<K, V>[]) new Dictionary[newCapacity];
-
-        // Initialize each position in the new table to a new ordered list
-        for (int i = 0; i < newCapacity; i++) {
-            newTable[i] = new OrderedDoubleList<>();
+    private void rehash() {
+        int newSize = HashTable.nextPrime((int) (1.1 * maxSize));
+        Dictionary<K,V>[] newTable = (Dictionary<K,V>[]) new Dictionary[newSize];
+        for (int i = 0; i < newSize; i++) {
+            newTable[i] = new OrderedDoubleList<K,V>();
         }
-
-        // Reinsert elements from the old table to the new table
-        Iterator<Entry<K,V>> ite = this.iterator();
-        while(ite.hasNext()){
-            Entry<K,V> entry = ite.next();
-
-            // Compute new hash for each entry
-            K key = entry.getKey();
-            V value = entry.getValue();
-            int newIndex = Math.abs(key.hashCode()) % newCapacity;
-
-            // Insert entry in the new table
-            newTable[newIndex].insert(key, value);
+        Iterator<Entry<K,V>> elemsIt = iterator();
+        while (elemsIt.hasNext()) {
+            Entry<K,V> currEntry = elemsIt.next();
+            int hashCode = Math.abs(currEntry.getKey().hashCode() % newSize);
+            newTable[hashCode].insert(currEntry.getKey(), currEntry.getValue());
         }
-
-        // Update the table reference and maxSize to the new table and capacity
         this.table = newTable;
-        this.maxSize = newCapacity;
+        maxSize = newSize; // Replace old table with the new one
     }
 
+
+
     @Override
-    public Iterator<Entry<K,V>> iterator( ) throws EmptyTreeException {
+    public Iterator<Entry<K,V>> iterator()  {
         Iterator<Entry<K,V>> ite = new OpenHashTableIterator<>(this, currentSize);
         return ite;
     } 

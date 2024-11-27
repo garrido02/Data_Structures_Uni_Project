@@ -17,11 +17,8 @@ public enum Constants {
     NOT_FOUND(-1),
     ZERO(0),
     ONE(1),
-    DEFAULT_CAPACITY(30),
-    DEFAULT_STATIONS(1000),
-    DEFAULT_LINES(500),
-    DEFAULT_SCHEDULES(10000);
-
+    DEFAULT_STATIONS(100),
+    DEFAULT_LINES(50);
 
 
     int i;

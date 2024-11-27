@@ -46,7 +46,7 @@ public interface Dictionary<K extends Comparable<K>,V> extends Serializable
      * @return previous value associated with key, 
      * or null if the dictionary does not has an entry with that key
      */
-    V insert( K key, V value ) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    V insert( K key, V value );
 
     /**
      * If there is an entry in the dictionary whose key is the specified key,
@@ -56,13 +56,13 @@ public interface Dictionary<K extends Comparable<K>,V> extends Serializable
      * @return previous value associated with key, 
      * or null if the dictionary does not an entry with that key
      */
-    V remove( K key );                                
+    V remove( K key ) ;
 
     /**
      * Returns an iterator of the entries in the dictionary.
      * @return  iterator of the entries in the dictionary
      */
-    Iterator<Entry<K,V>> iterator( ) throws EmptyTreeException, FullStackException;
+    Iterator<Entry<K,V>> iterator( );
 
 } 
 

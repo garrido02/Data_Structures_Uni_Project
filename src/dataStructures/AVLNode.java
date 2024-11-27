@@ -8,8 +8,11 @@ package dataStructures;
  *
  * @param <E> Generic element type
  */
-class AVLNode<E> extends BSTNode<E>
+class AVLNode<E extends Comparable<E>> extends BSTNode<E>
 {
+    static final long serialVersionUID = 0L;
+
+
     /**
      * Height of the node
      */
@@ -78,7 +81,7 @@ class AVLNode<E> extends BSTNode<E>
     /**
      * Return the child of this node with greater height
      */
-    AVLNode<E> tallerChild() {
+    AVLNode<E> tallerChild()  {
         AVLNode<E> leftChild = (AVLNode<E>) this.getLeft();
         AVLNode<E> rightChild = (AVLNode<E>) this.getRight();
         int leftChildHeight = getHeight(leftChild);
@@ -89,6 +92,8 @@ class AVLNode<E> extends BSTNode<E>
             return rightChild;
         return leftChild;
     }
+
+
 }
 
 

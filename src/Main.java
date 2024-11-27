@@ -12,7 +12,6 @@ import dataStructures.*;
 
 
 public class Main {
-
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
         redeFerroviaria(in);
@@ -43,8 +42,13 @@ public class Main {
         } while (Commands.valueOf(command) != Commands.TA);
     }
 
+    /**
+     * Checks the lines of a given station
+     * @param in - Scanner
+     * @param rede - The system
+     */
     private static void stationLines(Scanner in, Rede rede) {
-        String station = in.nextLine().trim();
+        String station = in.nextLine().trim().toLowerCase();
         try {
             Iterator<Entry<String, Void>> ite = rede.stationLines(station);
             while (ite.hasNext()){
@@ -53,43 +57,32 @@ public class Main {
             }
         } catch (StationDoesNotExistException e){
             System.out.println(Outputs.NONEXISTANT_STATION.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Checks the trains of a given station
+     * @param in - Scanner
+     * @param rede - The system
+     */
     private static void stationTrains(Scanner in, Rede rede){
-        String station = in.nextLine();
+        String station = in.nextLine().trim().toLowerCase();
         try{
             Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> ite = rede.stationTrains(station);
-            while (ite.hasNext()){
-                Entry<Date, OrderedDictionary<Integer, Train>> entry = ite.next();
-                Iterator<Entry<Integer, Train>> trainIte = entry.getValue().iterator();
-                while (trainIte.hasNext()){
-                    Train t = trainIte.next().getValue();
-                    System.out.printf(Outputs.TRAIN_HOUR.getString(), t.getNr(), entry.getKey());
+            if (ite != null ){
+                while (ite.hasNext()){
+                    Entry<Date, OrderedDictionary<Integer, Train>> entry = ite.next();
+                    Iterator<Entry<Integer, Train>> trainIte = entry.getValue().iterator();
+                    if (trainIte != null){
+                        while (trainIte.hasNext()){
+                            Train t = trainIte.next().getValue();
+                            System.out.printf(Outputs.TRAIN_HOUR.getString(), t.getNr(), entry.getKey().getHour(), entry.getKey().getMinutes());
+                        }
+                    }
                 }
             }
-        } catch (StationDoesNotExistException e){
+        } catch (StationDoesNotExistException e) {
             System.out.println(Outputs.NONEXISTANT_STATION.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -114,20 +107,10 @@ public class Main {
 
         try{
             rede.insertLine(line);
-            rede.addStationToLine(line, aux);
+            rede.addStationToLine(line.toLowerCase(), aux);
             System.out.println(Outputs.INSERT_LINE_OK.getString());
         } catch (LineAlreadyExistsException e) {
             System.out.println(Outputs.EXISTANT_LINE.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -137,22 +120,12 @@ public class Main {
      * @param rede - The system
      */
     private static void removeLine(Scanner in, Rede rede){
-        String line = in.nextLine().trim();
+        String line = in.nextLine().trim().toLowerCase();
         try {
             rede.removeLine(line);
             System.out.println(Outputs.REMOVE_LINE_OK.getString());
         } catch (NoLinesException e){
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -162,7 +135,7 @@ public class Main {
      * @param rede - The system
      */
     private static void checkLine(Scanner in, Rede rede){
-        String line = in.nextLine().trim();
+        String line = in.nextLine().trim().toLowerCase();
         try {
             Iterator<Station> ite = rede.iteratorByLine(line);
             while(ite.hasNext()){
@@ -171,16 +144,6 @@ public class Main {
             }
         } catch (NoLinesException e){
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -190,7 +153,7 @@ public class Main {
      * @param rede - The system
      */
     private static void insertSchedule(Scanner in, Rede rede) {
-        String line = in.nextLine().trim();
+        String line = in.nextLine().trim().toLowerCase();
         int trainNr = in.nextInt();
         in.nextLine();
         boolean end = false;
@@ -215,16 +178,6 @@ public class Main {
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
         } catch (InvalidScheduleException e){
             System.out.println(Outputs.INVALID_SCHEDULE.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -234,11 +187,11 @@ public class Main {
      * @param rede - The system
      */
     private static void removeSchedule(Scanner in, Rede rede){
-        String line = in.nextLine().trim();
+        String line = in.nextLine().trim().toLowerCase();
 
         String stationAndHour = in.nextLine().trim();
         int index = stationAndHour.indexOf(":");
-        String station = stationAndHour.substring(0, index - 3);
+        String station = stationAndHour.substring(0, index - 3).toLowerCase();
         String hour = stationAndHour.substring(index - 2);
 
         try{
@@ -248,16 +201,6 @@ public class Main {
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
         } catch (NonExistantScheduleException e){
             System.out.println(Outputs.NONEXISTANT_SCHEDULE.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -267,7 +210,7 @@ public class Main {
      * @param rede - The system
      */
     private static void listLineSchedule(Scanner in, Rede rede) {
-        String line = in.nextLine().trim();
+        String line = in.nextLine().trim().toLowerCase();
         String startingStation = in.nextLine().trim();
 
         try {
@@ -284,20 +227,10 @@ public class Main {
                     }
                 }
             }
-    } catch (NoLinesException e){
+        } catch (NoLinesException e){
             System.out.println(Outputs.NONEXISTANT_LINE.getString());
         } catch (NotStartingStationException e){
             System.out.println(Outputs.NONEXISTANT_START_STATION.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -307,9 +240,9 @@ public class Main {
      * @param rede - The system
      */
     private static void bestTimeTable(Scanner in, Rede rede){
-        String line = in.nextLine().trim();
-        String startingStation = in.nextLine().trim();
-        String endingStation = in.nextLine().trim();
+        String line = in.nextLine().trim().toLowerCase();
+        String startingStation = in.nextLine().trim().toLowerCase();
+        String endingStation = in.nextLine().trim().toLowerCase();
         String hour = in.nextLine().trim();
 
         try {
@@ -330,16 +263,6 @@ public class Main {
             System.out.println(Outputs.NONEXISTANT_START_STATION.getString());
         } catch (NotPossibleException e){
             System.out.println(Outputs.IMPOSSIBLE_ROUTE.getString());
-        } catch (EmptyTreeException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyStackException e) {
-            throw new RuntimeException(e);
-        } catch (EmptyQueueException e) {
-            throw new RuntimeException(e);
-        } catch (FullStackException e) {
-            throw new RuntimeException(e);
-        } catch (FullQueueException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -348,8 +271,8 @@ public class Main {
      * @param rede - The system
      */
     private static void terminateApplication(Rede rede){
-        save(rede);
         System.out.println(Outputs.APP_TERM.getString());
+        save(rede);
     }
 
     /**
@@ -382,7 +305,3 @@ public class Main {
         }
     }
 }
-
-/**
- * End of Class Main
- */

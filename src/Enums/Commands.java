@@ -11,6 +11,7 @@ package Enums;
  * Enum Commands responsible for supporting the integration of commands into main
  */
 public enum Commands {
+
     /**
      * Input commands
      */

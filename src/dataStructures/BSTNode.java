@@ -1,6 +1,7 @@
 package dataStructures;
 
-import java.io.Serializable; 
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * BST node implementation
@@ -10,14 +11,17 @@ import java.io.Serializable;
  *
  * @param <E> Generic Value
  */
-public class BSTNode<E extends Comparable<E>> implements Serializable, Comparable<BSTNode<E>> {
+
+public class BSTNode<E extends Comparable<E>> implements Serializable, Comparable<BSTNode<E>>
+{
+    @Serial
+    private static final long serialVersionUID = 0L;
+
 
     /**
      * Element stored in the node.
      */
     protected E element;
-
-
 
     /**
      * (Pointer to) the left child.
@@ -61,8 +65,6 @@ public class BSTNode<E extends Comparable<E>> implements Serializable, Comparabl
         return element;
     }
 
-
-
     /**
      * Returns the left child node of the current node.
      * 
@@ -94,7 +96,7 @@ public class BSTNode<E extends Comparable<E>> implements Serializable, Comparabl
     }
 
     boolean isInternal() {
-        return left != null || right != null;
+        return this.left != null || this.right!= null;
     }
 
     public void setLeft(BSTNode<E> left) {
@@ -115,6 +117,7 @@ public class BSTNode<E extends Comparable<E>> implements Serializable, Comparabl
 
     @Override
     public int compareTo(BSTNode<E> o) {
-        return this.element.compareTo(o.element);
+        int result = this.element.compareTo(o.element);
+        return result;
     }
 }

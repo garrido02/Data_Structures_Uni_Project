@@ -34,7 +34,7 @@ public interface Rede extends Serializable {
      * @param startingStation - The name of the station
      * @return an iterator of Objects of type String corresponding to the stations of a given line
      */
-    Iterator<Entry<Date, Train>> scheduleByLineIterator(String line, String startingStation) throws NoLinesException, NotStartingStationException, EmptyTreeException, FullStackException;
+    Iterator<Entry<Date, Train>> scheduleByLineIterator(String line, String startingStation) throws NoLinesException, NotStartingStationException;
 
     /**
      * Finds the train that best suits a given arrival time in a station of a given line
@@ -44,28 +44,28 @@ public interface Rede extends Serializable {
      * @param hour - The expected hour of arrival
      * @return an Object of type Train corresponding to the train that best suits a given arrival time in a station of a given line
      */
-    Train bestTimeTable(String line, String startingStation, String endingStation, String hour) throws NoLinesException, NotStartingStationException, NotPossibleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    Train bestTimeTable(String line, String startingStation, String endingStation, String hour) throws NoLinesException, NotStartingStationException, NotPossibleException;
 
     /**
      * Insert new Object of type Line to the system
      * @param line - The name of a line
      * @throws LineAlreadyExistsException - The line already exists
      */
-    void insertLine(String line) throws LineAlreadyExistsException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void insertLine(String line) throws LineAlreadyExistsException;
 
     /**
      * Insert a station to a given line corresponding to an Object of type Line
      * @param line - The name of the line
      * @param aux - The list of stations to be added to a given Line
      */
-    void addStationToLine(String line, List<String> aux) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void addStationToLine(String line, List<String> aux);
 
     /**
      * Removes an Object of type Line from the system
      * @param line - The name of the line
      * @throws NoLinesException - The line does not exist in the system
      */
-    void removeLine(String line) throws NoLinesException, EmptyStackException, EmptyTreeException, EmptyQueueException, FullStackException, FullQueueException;
+    void removeLine(String line) throws NoLinesException;
 
     /**
      * Removes a train schedule from a given line which departures at a given station at a given hour
@@ -75,7 +75,7 @@ public interface Rede extends Serializable {
      * @throws NoLinesException - The line does not exist in the system
      * @throws NonExistantScheduleException - The schedule does not exist in the system
      */
-    void removeSchedule(String line, String startingStation, String hour) throws NoLinesException, NonExistantScheduleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void removeSchedule(String line, String startingStation, String hour) throws NoLinesException, NonExistantScheduleException;
 
     /**
      * Inserts a train schedule in a given line
@@ -85,7 +85,7 @@ public interface Rede extends Serializable {
      * @throws NoLinesException - The line does not exist in the system
      * @throws InvalidScheduleException - The schedule does not exist in the system
      */
-    void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException, EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException;
 
     Iterator<Entry<String, Void>> stationLines(String station) throws StationDoesNotExistException;
 

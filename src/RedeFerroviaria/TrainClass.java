@@ -11,6 +11,8 @@ import dataStructures.Entry;
 import dataStructures.Iterator;
 import dataStructures.List;
 
+import java.io.Serial;
+
 /**
  * Class Train responsible to implement the prototyped methods in the Train interface
  */
@@ -19,11 +21,10 @@ public class TrainClass implements TrainUpdatable {
      * Instance variables
      */
     private int nr;
-    private Station departureStation;
-    private Date departureTime;
     private List<Entry<String, Date>> schedule;
 
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 0L;
 
     /**
      * Constructor
@@ -43,31 +44,9 @@ public class TrainClass implements TrainUpdatable {
         return nr;
     }
 
-
-    @Override
-    public Date getDepartureTime() {
-        return departureTime;
-    }
-
     @Override
     public Iterator<Entry<String, Date>> scheduleIterator() {
         return schedule.iterator();
-    }
-
-    @Override
-    public Station getStartingStation() {
-        return departureStation;
-    }
-
-    @Override
-    public void setDepartureTime(Date time) {
-        departureTime = time;
-    }
-
-
-    @Override
-    public void setDepartureStation(Station station) {
-        departureStation = station;
     }
 
     @Override

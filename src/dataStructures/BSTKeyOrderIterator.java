@@ -1,15 +1,17 @@
 package dataStructures;
-import Exceptions.*;
+
+import Exceptions.NoSuchElementException;
 
 class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K,V>> {
 
-	
+	private static final long serialVersionUID = 0L;
+
 	protected BSTNode<Entry<K,V>> root;
 
 	protected Stack<BSTNode<Entry<K,V>>> p;
 
 
-	BSTKeyOrderIterator(BSTNode<Entry<K,V>> root) throws FullStackException {
+	BSTKeyOrderIterator(BSTNode<Entry<K,V>> root){
 		this.root=root;
 		this.p = new StackInList<>();
 		rewind();
@@ -21,7 +23,7 @@ class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K
 	 * Expected Case: O(log(n))
 	 * @param node
 	 */
-	private void pushPathToMinimum(BSTNode<Entry<K,V>> node) throws FullStackException {
+	private void pushPathToMinimum(BSTNode<Entry<K,V>> node) {
 		while(node != null){
 			p.push(node);
 			node = node.left;
@@ -35,7 +37,7 @@ class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K
 	 }
 
 
-    public Entry<K,V> next( ) throws NoSuchElementException, FullStackException, EmptyStackException {
+    public Entry<K,V> next( ) throws NoSuchElementException {
     	if (!hasNext()) throw new NoSuchElementException();
     	else {
 			BSTNode<Entry<K,V>> toReturn = p.pop();
@@ -44,7 +46,7 @@ class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K
     	}
     }
 
-    public void rewind( ) throws FullStackException {
+    public void rewind( ){
 		p = new StackInList<>();
     	pushPathToMinimum(root);
     }

@@ -42,14 +42,14 @@ public interface Stack<E> extends Serializable
      *  Inserts the specified <code>element</code> onto the top of the stack.
      * @param element element to be inserted onto the stack
      */
-    void push( E element ) throws FullStackException;
+    void push( E element );
 
     /**
      *  Removes and returns the element at the top of the stack.
      * @return element removed from top of stack
      * @throws EmptyStackException when stack = 0
      */
-    E pop( ) throws EmptyStackException;
+    E pop( );
 
 }
 

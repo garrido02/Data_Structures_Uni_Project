@@ -27,13 +27,13 @@ public interface Iterator<E> extends Serializable
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
-    E next( ) throws NoSuchElementException, EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException;
+    E next( ) throws NoSuchElementException;
 
     /**
      * Restarts the iteration.
      * After rewind, if the iteration is not empty,
      * next will return the first element in the iteration.
      */
-    void rewind( ) throws FullStackException, FullQueueException;
+    void rewind( ) throws FullStackException, FullQueueException, EmptyTreeException;
 
 }

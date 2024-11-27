@@ -1,5 +1,8 @@
 package dataStructures;
 import Exceptions.*;
+
+import java.io.Serial;
+
 /**
  * Hash table implementation
  * @author AED  Team
@@ -13,7 +16,8 @@ public abstract class HashTable<K extends Comparable<K>,V> implements Dictionary
 	/**
 	 * Serial Version UID of the Class.
 	 */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 0L;
 
 	/**
 	 * Default size of the hash table.
@@ -113,13 +117,13 @@ public abstract class HashTable<K extends Comparable<K>,V> implements Dictionary
     public abstract V find( K key );
 
     @Override
-    public abstract V insert( K key, V value ) throws NoSuchElementException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException, EmptyTreeException;
+    public abstract V insert( K key, V value ) throws NoSuchElementException;
 
     @Override
     public abstract V remove( K key );
 
     @Override
-    public abstract Iterator<Entry<K,V>> iterator( ) throws EmptyTreeException;
+    public abstract Iterator<Entry<K,V>> iterator( ) ;
 
 
     //

@@ -6,10 +6,16 @@
 package dataStructures;
 
 
+import java.io.Serial;
+
 /**
  * Class Entry responsible to implement the methods of the Entry interface
  */
+
 public class EntryClass<K extends Comparable<K>,V> implements EntryUpdatable<K,V> {
+
+    @Serial
+    private static final long serialVersionUID = 0L;
     /**
      * Instance variables
      */

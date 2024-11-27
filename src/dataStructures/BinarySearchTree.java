@@ -1,6 +1,7 @@
 package dataStructures;
 import Exceptions.*;
 
+
 /**
  * BinarySearchTree implementation
  * @author AED team
@@ -10,7 +11,9 @@ import Exceptions.*;
  */
 public class BinarySearchTree<K extends Comparable<K>, V> 
     implements OrderedDictionary<K,V>
-{                                                                   
+{
+    static final long serialVersionUID = 0L;
+
     /**
      * The root of the tree.                                            
      * 
@@ -52,7 +55,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
 
     @Override
     public V find( K key )                             
-    {    
+    {
         BSTNode<Entry<K,V>> node = this.findNode(key);
         if ( node == null || node.getElement().getKey().compareTo(key) != 0 )
             return null;                                    
@@ -64,28 +67,30 @@ public class BinarySearchTree<K extends Comparable<K>, V>
     /*
     **
      * Returns the node whose key is the specified key;
-     * or null if no such node exists.
-     *
-     * @param node where the search starts
+     * or null if no such node exists.        
+     *                         
+     * @param node where the search starts 
      * @param key to be found
      * @return the found node, when the search is successful
      *
      */
     BSTNode<Entry<K,V>> findNode( BSTNode<Entry<K,V>> node, K key )
-    {
+    {                                                                   
         if ( node == null )
             return null;
         else
         {
             int compResult = key.compareTo( node.getElement().getKey() );
             if ( compResult == 0 )
-                return node;
+                return node;                                         
             else if ( compResult < 0 )
                 return this.findNode(node.getLeft(), key);
-            else
-                return this.findNode(node.getRight(), key);
-        }
+            else                                                     
+                return this.findNode(node.getRight(), key); 
+        }                 
     }
+
+
 
     @Override
     public Entry<K,V> minEntry( ) throws EmptyDictionaryException
@@ -149,18 +154,21 @@ public class BinarySearchTree<K extends Comparable<K>, V>
      * @return see above
      
      */
-    BSTNode<Entry<K,V>> findNode(K key)
+    BSTNode<Entry<K,V>> findNode( K key)
     {      
         BSTNode<Entry<K,V>> node = root;
+
         while ( node != null )
         {
             int compResult = key.compareTo( node.getElement().getKey() );
             if ( compResult == 0 )
                 return node;
             else if ( compResult < 0 ) {
+
                 node = node.getLeft();
             }
             else {
+
                 node = node.getRight();
             }
         }
@@ -188,6 +196,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
             return oldValue;
         }
     }
+
 
     /**
      * Links a new subtree, rooted at the specified node, to the tree.
@@ -250,9 +259,10 @@ public class BinarySearchTree<K extends Comparable<K>, V>
      * which preserves the key order relation.
      * @return  key-order iterator of the entries in the dictionary
      */
-    public Iterator<Entry<K,V>> iterator( ) throws EmptyTreeException, FullStackException {
-        if (root == null)
-            throw new EmptyTreeException();
+    public Iterator<Entry<K,V>> iterator( ){
+        if (root == null){
+            return null;
+        }
         return new BSTKeyOrderIterator<>(root);
     }
 

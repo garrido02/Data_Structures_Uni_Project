@@ -5,7 +5,6 @@
 
 
 package RedeFerroviaria;
-import Exceptions.*;
 import dataStructures.*;
 
 
@@ -17,23 +16,27 @@ public interface LineUpdatable extends Line {
      * Adds a station to the line
      * @param station - The name of the station
      */
-    void addStation(Station station) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void addStation(Station station);
 
     /**
      * Adds a train schedule to the line
      * @param trainNr - The number of the train to be added
      * @param stations - The list of stations on the route of the train
      */
-    void addSchedule(int trainNr, List<Entry<String, String>> stations) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void addSchedule(int trainNr, List<Entry<String, String>> stations);
 
     /**
      * Removes a train schedule from a given line which departures at a given station at a given hour
      * @param startingStation - The name of the departure station
      * @param hour - The hour of departure
      */
-    void removeSchedule(String startingStation, String hour) throws EmptyTreeException, EmptyStackException, EmptyQueueException, FullStackException, FullQueueException;
+    void removeSchedule(String startingStation, String hour);
 
-    void removeLineFromStations() throws EmptyTreeException, FullStackException, EmptyStackException, EmptyQueueException, FullQueueException;
+    /**
+     * Removes a given line from stations that cross that line
+     * @return a list of obsolete stations after the line removal
+     */
+    List<Station> removeLineFromStations();
 }
 
 /**

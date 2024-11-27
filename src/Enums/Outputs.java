@@ -27,7 +27,7 @@ public enum Outputs {
     NONEXISTANT_START_STATION("Estação de partida inexistente."),
     IMPOSSIBLE_ROUTE("Percurso impossível."),
     STATION_HOUR("%s %02d:%02d\n"),
-    TRAIN_HOUR("Comboio %d %02d:02d\n"),
+    TRAIN_HOUR("Comboio %d %02d:%02d\n"),
     STRING("%s\n"),
     NONEXISTANT_STATION("Estação inexistente."),
     APP_TERM("Aplicação terminada."),

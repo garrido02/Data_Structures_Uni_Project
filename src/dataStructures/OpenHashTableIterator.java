@@ -1,52 +1,63 @@
 package dataStructures;
-import Exceptions.*;
 
-public class OpenHashTableIterator<K extends Comparable<K>,V> implements Iterator<Entry<K,V>> {
+import Exceptions.NoSuchElementException;
+
+/**
+ * @author Francisco Oliveira nº67711 fmr.oliveira@campus.fct.unl.pt
+ * @author João Ribeiro nº 68155 joc.ribeiro@campus.fct.unl.pt
+ */
+public class OpenHashTableIterator<K extends Comparable<K>,V> implements Iterator<Entry<K,V>>{
+
+    private static final long serialVersionUID = 0L;
+
+    protected Dictionary<K,V>[] table;
     private int size;
     private int current;
     private int returned;
-    protected Dictionary<K, V>[] table;
-    private Iterator<Entry<K,V>> iterator;
+    private Iterator<Entry<K,V>> currIt;
 
-    static final long serialVersionUID = 0L;
-
-    public OpenHashTableIterator(SepChainHashTable<K, V> hashTable, int size) throws EmptyTreeException {
+    public OpenHashTableIterator(SepChainHashTable<K,V> hashTable, int currentSize){
         this.table = hashTable.table;
-        this.size = size;
+        this.size = table.length;
         this.current = 0;
         this.returned = 0;
-        findNext();
+        this.currIt = table[0].iterator(); // Initialize currIt to avoid NullPointerException
+        rewind();
     }
 
-    private void findNext() throws EmptyTreeException {
-        while (table[current].isEmpty() && current < size) {
+    private void findNext() {
+        while (current < table.length && table[current].isEmpty()){
             current++;
         }
-        iterator = table[current].iterator();
+        if (current < table.length)
+            currIt = table[current++].iterator();
     }
 
 
     @Override
     public boolean hasNext() {
-        return returned < size;
-    }
-
-    @Override
-    public Entry<K,V> next() throws NoSuchElementException, EmptyTreeException {
-        if (size == 0){
-            throw new NoSuchElementException();
-        }
-        if(iterator.hasNext()){
-            return iterator.next();
+        if (currIt != null && currIt.hasNext()) {
+            return true;
         }
         returned++;
-        findNext();
-        return iterator.next();
+        findNext(); // Tenta encontrar o próximo dicionário não vazio
+        //Previne que ele ignore o último iterador
+        return ((current < table.length && returned < size) || (currIt != null && currIt.hasNext()));
+    }
+
+
+
+    @Override
+    public Entry<K, V> next() throws NoSuchElementException {
+        if (size == 0)
+            throw new NoSuchElementException();
+        return currIt.next();
     }
 
     @Override
     public void rewind() {
         current = 0;
         returned = 0;
+        findNext();
     }
 }

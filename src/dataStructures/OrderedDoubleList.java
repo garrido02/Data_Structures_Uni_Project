@@ -1,12 +1,14 @@
 package dataStructures;
 import Exceptions.*;
 
+import java.io.Serial;
+
 
 /**
  * Doubly linked list Implementation 
  * @author AED  Team
  * @version 1.0
- * @param <K, V> Generics - K extends Comparable
+ * @param <K,V> Generics - K extends Comparable
  * 
  */
 public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDictionary<K , V> {
@@ -14,7 +16,8 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     /**
 	 * Serial Version UID of the Class
 	 */
-    static final long serialVersionUID = 0L;
+     @Serial
+     private static final long serialVersionUID = 0L;
     
 	/**
      *  Node at the head of the list.
@@ -115,23 +118,38 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
      * @param key - Key of type K to be searched
      * @return DoubleListNode<E> where the Entry with key was found, or the one with the key immediately after
      */
-	protected DoubleListNode<Entry<K,V>> findNode (K key){
-        DoubleListNode<Entry<K,V>> currentNode = head;
-        while(currentNode != null){
-            K currentKey = currentNode.getElement().getKey();
-            if(currentKey.equals(key)){
+    protected DoubleListNode<Entry<K, V>> findNode(K key) {
+        DoubleListNode<Entry<K, V>> currentNode = head;
+
+        while (currentNode != null) {
+            Entry<K, V> currentEntry = currentNode.getElement();
+
+            if (currentEntry == null || currentEntry.getKey() == null) {
+                currentNode = currentNode.getNext();
+                continue; // Skip null entries safely
+            }
+
+            K currentKey = currentEntry.getKey();
+
+            // Check for key match
+            if (currentKey.equals(key)) {
                 return currentNode;
             }
 
-            if ( currentKey.compareTo(key) > 0) {
-                return currentNode;
+            // Compare keys to maintain ordered traversal
+            int compare = currentKey.compareTo(key);
+            if (compare > 0) {
+                // If current key is greater, key is not in the list
+                return null;
             }
 
             currentNode = currentNode.getNext();
         }
 
+        // Key not found in the list
         return null;
-	}
+    }
+
 	
     @Override
 	public V find(K key) {
@@ -145,23 +163,42 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 	}
 
 
-	@Override
-	public V insert(K key, V value) {
-		DoubleListNode<Entry<K,V>> node = findNode(key);
-		if ((node!=null) && (node.getElement().getKey().compareTo(key)==0)){
+    public V insert(K key, V value) {
+        DoubleListNode<Entry<K, V>> node = head;
+        DoubleListNode<Entry<K, V>> previousNode = null;
+
+        // Traverse to find the correct position
+        while (node != null && node.getElement().getKey().compareTo(key) < 0) {
+            previousNode = node;
+            node = node.getNext();
+        }
+
+        // If key exists, update its value
+        if (node != null && node.getElement().getKey().equals(key)) {
             V oldValue = node.getElement().getValue();
             node.getElement().setValue(value);
             return oldValue;
-		}
-		else { 
-		  Entry<K,V> newEntry=new EntryClass<K,V> (key, value);
-            if( node == null )
-                this.addLast(newEntry);
-            else
-                addBeforeNode(newEntry,node);
-		  return null;
-		}
-	}
+        }
+
+        // Create a new entry
+        Entry<K, V> newEntry = new EntryClass<>(key, value);
+        DoubleListNode<Entry<K, V>> newNode = new DoubleListNode<>(newEntry);
+
+        // Insert at the correct position
+        if (previousNode == null) {
+            // Insert at the head
+            addFirst(newEntry);
+        } else if (node == null) {
+            // Insert at the tail
+            addLast(newEntry);
+        } else {
+            // Insert before the current node
+            addBeforeNode(newEntry, node);
+        }
+
+        return null; // New entry added
+    }
+
 	
 	@Override
     public boolean isEmpty() {
@@ -193,9 +230,9 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     /**
      * Removes and returns the value at the first entry in the list.
      */
-    protected V removeFirst( ) throws EmptyDictionaryException {
+    protected V removeFirst( )  {
         if (this.isEmpty()) {
-            throw new EmptyDictionaryException();
+            return null;
         } else {
             V value = head.getElement().getValue();
             head = head.getNext();
@@ -230,10 +267,10 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     /**
      * Removes and returns the value at the last entry in the list.
      */
-    protected V removeLast( ) throws EmptyDictionaryException
+    protected V removeLast( )
     {
         if ( this.isEmpty() )
-            throw new EmptyDictionaryException();
+            return null;
 
         V value = tail.getElement().getValue();
         this.removeLastNode();
@@ -243,29 +280,31 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     /**
      * Removes the specified node from the list.
      * Pre-condition: the node is neither the head nor the tail of the list.
+     *
      * @param node - middle node to be removed
+     * @return
      */
-    protected void removeMiddleNode( DoubleListNode<Entry<K,V>> node )
-    {
-        DoubleListNode<Entry<K,V>> previous = node.getPrevious();
-        DoubleListNode<Entry<K,V>> next = node.getNext();
-
-        previous.setNext(next);
-        next.setPrevious(previous);
+    protected V removeMiddleNode(DoubleListNode<Entry<K,V>> node ) {
+        DoubleListNode<Entry<K,V>> prevNode = node.getPrevious( );
+        DoubleListNode<Entry<K,V>> nextNode = node.getNext( );
+        prevNode.setNext( nextNode );
+        nextNode.setPrevious( prevNode );
         currentSize--;
-
-
+        return node.getElement().getValue();
     }
 
     @Override
-    public V remove(K key) {
+    public V remove(K key)  {
 		DoubleListNode<Entry<K,V>> node = findNode(key);
-		if ((node == null) || (node.getElement().getKey().compareTo(key)!=0))
-			return null;
-		else {
-			  	removeMiddleNode(node);
-			return node.getElement().getValue();
-		}
+        if ( node == head )
+            return this.removeFirst();
+        else if ( node == tail )
+            return this.removeLast();
+        else
+        {
+            removeMiddleNode(node);
+            return node.getElement().getValue();
+        }
 	}
 
     @Override

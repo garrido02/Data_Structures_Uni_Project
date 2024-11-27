@@ -1,5 +1,7 @@
 package dataStructures;
 
+import java.io.Serial;
+
 /**
  * Advanced BSTree Data Type implementation
  * @author AED team
@@ -9,58 +11,80 @@ package dataStructures;
  */
 public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K,V>
 {
+    @Serial
+    private static final long serialVersionUID = 0L;
+
+
     /**
-     * Performs a single left rotation rooted at A node.
-     * Node B was a  right  child  of A before the  rotation,
-     * then A becomes the left child of B after the rotation.
-     * @param A - root of the rotation
-     * @pre: A has a right child
+     * Performs a single left rotation rooted at Y node.
+     * Node X was a  right  child  of Y before the  rotation,
+     * then Y becomes the left child of X after the rotation.
+     * @param a - root of the rotation
+     * @pre: Y has a right child
      */
-    protected void rotateLeft( BSTNode<Entry<K,V>> A)
+    protected void rotateLeft( BSTNode<Entry<K,V>> a)
     {
-        BSTNode<Entry<K,V>> B = A.right;
-        A.setRight(B.left);
-        if (B.left != null){
-            B.left.setParent(A);
+        BSTNode<Entry<K, V>> b = a.right; // `b` is `a`'s right child
+        a.setRight(b.left); // Transfer `b`'s left subtree to `a`'s right
+
+        if (b.left != null) {
+            b.left.setParent(a); // Update parent of `b.left` to be `a`
         }
-        B.setParent(A.parent);
-        if (A.parent == null){
-            root = B;
-        } else if (A == A.parent.left){
-            A.parent.setLeft(B);
+
+        b.setParent(a.getParent()); // `b`'s parent becomes `a`'s parent
+
+        if (a.getParent() == null) {
+            root = b; // If `a` was the root, `b` is now the root
+        } else if (a == a.getParent().left) {
+            a.getParent().setLeft(b); // Update the left child of `a`'s parent
         } else {
-            A.parent.setRight(B);
+            a.getParent().setRight(b); // Update the right child of `a`'s parent
         }
-        B.setLeft(A);
-        A.setParent(B);
+
+        b.setLeft(a); // Make `a` the left child of `b`
+        a.setParent(b); // Update `a`'s parent to be `b`
     }
 
 
     /**
-     * Performs a single right rotation rooted at C node.
-     * Node B was a  left  child  of C before the  rotation,
-     * then C becomes the right child of B after the rotation.
-     * @param C - root of the rotation
-     * @pre: C has a left child
-     */
-    protected void rotateRight( BSTNode<Entry<K,V>> C)
-    {
-        BSTNode<Entry<K,V>> B = C.left;
-        C.setLeft(B.right);
+    * BSTNode<Entry<K,V>> b = a.right;
+    *         a.setRight(b.left);
+    *         b.setLeft(a);
+    *         root = b;
+    */
 
-        if (B.right != null){
-            B.right.setParent(C);
+
+
+    /**
+     * Performs a single right rotation rooted at Y node.
+     * Node X was a  left  child  of Y before the  rotation,
+     * then Y becomes the right child of X after the rotation.
+     * @param c - root of the rotation
+     * @pre: Y has a left child
+     */
+    protected void rotateRight( BSTNode<Entry<K,V>> c)
+    {
+
+        BSTNode<Entry<K, V>> b = c.left;
+        c.setLeft(b.right);
+
+        if (b.right != null) {
+            b.right.setParent(c);
         }
-        B.setParent(C.parent);
-        if (C.parent == null){
-            root = B;
-        } else if (C == C.parent.left){
-            C.parent.setLeft(B);
+
+        b.setParent(c.getParent());
+
+        if (c.getParent() == null) {
+            root = b;
+        } else if (c == c.getParent().left) {
+            c.getParent().setLeft(b);
         } else {
-            C.parent.setRight(B);
+            c.getParent().setRight(b);
         }
-        B.setRight(C);
-        C.setParent(B);
+
+        b.setRight(c);
+        c.setParent(b);
+
     }
 
     /**
@@ -85,28 +109,33 @@ public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinaryS
         // The double rotation arises when position x has the middle of the three relevant keys
         // and is first rotated above its parent Y, and then above what was originally its grandparent Z.
         // In any of the cases, the trinode restructuring is completed with O(1)running time
-        BSTNode<Entry<K,V>> Y = X.parent;
-        BSTNode<Entry<K,V>> Z = Y.parent;
 
-        if (Z.left.equals(Y)){
-            if (Y.left.equals(X)){
-                rotateRight(Z);
-                return Y;
+
+            BSTNode<Entry<K, V>> Y = X.parent;
+            BSTNode<Entry<K, V>> Z = Y.parent;
+
+
+            if (Z.left != null && Z.left.equals(Y)) {
+                if (Y.left != null && Y.left.equals(X)) {
+                    rotateRight(Z);
+                    return Y;
+                } else {
+                    rotateLeft(Y);
+                    rotateRight(Z);
+                    return X;
+                }
             } else {
-                rotateLeft(Y);
-                rotateRight(Z);
-                return X;
-            }
-        } else {
-            if (Y.right.equals(X)){
-                rotateLeft(Z);
-                return Y;
-            } else {
-                rotateRight(Y);
-                rotateLeft(Z);
-                return X;
+                if (Y.right != null && Y.right.equals(X)) {
+                    rotateLeft(Z);
+                    return Y;
+                } else {
+                    rotateRight(Y);
+                    rotateLeft(Z);
+                    return X;
+                }
             }
         }
     }
-}
+
+
 

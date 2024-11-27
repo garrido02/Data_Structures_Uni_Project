@@ -3,11 +3,8 @@
  * @Authors Francisco Correia 67264 & Sérgio Garrido 67202
  */
 
-
-
 package RedeFerroviaria;
 import java.io.Serializable;
-
 
 /**
  * Interface Date responsible to prototype methods to handle a Date Object, extending Serializable
