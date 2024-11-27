@@ -2,10 +2,6 @@ package dataStructures;
 
 import Exceptions.NoSuchElementException;
 
-/**
- * @author Francisco Oliveira nº67711 fmr.oliveira@campus.fct.unl.pt
- * @author João Ribeiro nº 68155 joc.ribeiro@campus.fct.unl.pt
- */
 public class OpenHashTableIterator<K extends Comparable<K>,V> implements Iterator<Entry<K,V>>{
 
     private static final long serialVersionUID = 0L;
@@ -16,12 +12,12 @@ public class OpenHashTableIterator<K extends Comparable<K>,V> implements Iterato
     private int returned;
     private Iterator<Entry<K,V>> currIt;
 
-    public OpenHashTableIterator(SepChainHashTable<K,V> hashTable, int currentSize){
+    public OpenHashTableIterator(SepChainHashTable<K,V> hashTable){
         this.table = hashTable.table;
         this.size = table.length;
         this.current = 0;
         this.returned = 0;
-        this.currIt = table[0].iterator(); // Initialize currIt to avoid NullPointerException
+        this.currIt = table[0].iterator();
         rewind();
     }
 
@@ -40,8 +36,8 @@ public class OpenHashTableIterator<K extends Comparable<K>,V> implements Iterato
             return true;
         }
         returned++;
-        findNext(); // Tenta encontrar o próximo dicionário não vazio
-        //Previne que ele ignore o último iterador
+        findNext();
+
         return ((current < table.length && returned < size) || (currIt != null && currIt.hasNext()));
     }
 

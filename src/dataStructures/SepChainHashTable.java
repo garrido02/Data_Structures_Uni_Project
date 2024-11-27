@@ -110,7 +110,7 @@ public class SepChainHashTable<K extends Comparable<K>, V>
 
     @Override
     public Iterator<Entry<K,V>> iterator()  {
-        Iterator<Entry<K,V>> ite = new OpenHashTableIterator<>(this, currentSize);
+        Iterator<Entry<K,V>> ite = new OpenHashTableIterator<>(this);
         return ite;
     } 
 }
