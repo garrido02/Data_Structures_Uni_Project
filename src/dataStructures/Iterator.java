@@ -8,6 +8,7 @@ import java.io.Serializable;
  * Iterator Abstract Data Type 
  * Includes description of general methods for one way iterator.
  * @author AED  Team
+ * @author of changes Francisco Correia 67264 & Sérgio Garrido 67202
  * @version 1.0
  * @param <E> Generic Element
  * 
@@ -35,5 +36,8 @@ public interface Iterator<E> extends Serializable
      * next will return the first element in the iteration.
      */
     void rewind( ) throws FullStackException, FullQueueException, EmptyTreeException;
-
 }
+
+/**
+ * End of Iterator
+ */

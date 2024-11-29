@@ -141,6 +141,10 @@ public abstract class HashTable<K extends Comparable<K>,V> implements Dictionary
     }
 }
 
+/**
+ * End of class HashTable
+ */
+
 
 
 

@@ -5,10 +5,8 @@ import java.io.Serializable;
 
 /**
  * BST node implementation
- * 
  * @author AED team
  * @version 1.0
- *
  * @param <E> Generic Value
  */
 
@@ -121,3 +119,7 @@ public class BSTNode<E extends Comparable<E>> implements Serializable, Comparabl
         return result;
     }
 }
+
+/**
+ * End of class BSTNode
+ */

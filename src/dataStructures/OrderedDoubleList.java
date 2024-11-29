@@ -176,7 +176,8 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
         // If key exists, update its value
         if (node != null && node.getElement().getKey().equals(key)) {
             V oldValue = node.getElement().getValue();
-            node.getElement().setValue(value);
+            EntryUpdatable<K,V> nodeElement = (EntryUpdatable<K,V>) node.getElement();
+            nodeElement.setValue(value);
             return oldValue;
         }
 
@@ -311,6 +312,8 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 	public int size() {
 		return currentSize;
 	}
-	
-	
 }
+
+/**
+ * End of class OrderedDoubleList
+ */

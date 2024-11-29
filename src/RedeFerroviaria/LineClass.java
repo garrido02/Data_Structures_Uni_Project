@@ -50,7 +50,7 @@ public class LineClass implements LineUpdatable {
     @Override
     public void addStation(Station station) {
         StationUpdatable s = (StationUpdatable) station;
-        s.insertLine(this.name);
+        s.insertLine(this.name.toLowerCase(), this.name);
         stations.insert(station.getName().toLowerCase(), s);
         stationsByInsertion.addLast(s);
     }
@@ -153,7 +153,7 @@ public class LineClass implements LineUpdatable {
         List<Station> stationsToRemove = new DoubleList<>();
         while (ite.hasNext()) {
             StationUpdatable s = (StationUpdatable) stations.find(ite.next().getName().toLowerCase());
-            s.removeLine(this.name);
+            s.removeLine(this.name.toLowerCase());
             if (s.isObsolete()){
                 stationsToRemove.addLast(s);
             }

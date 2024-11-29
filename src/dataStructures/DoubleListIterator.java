@@ -3,7 +3,6 @@ package dataStructures;
 
 import Exceptions.NoSuchElementException;
 
-import java.io.Serial;
 
 /**
  * Implementation of Two Way Iterator for DLList 
@@ -14,11 +13,6 @@ import java.io.Serial;
  */
 class DoubleListIterator<E> implements TwoWayIterator<E>
 {
-
-	/**
-	 * Serial Version UID of the Class
-	 */
-    @Serial
     private static final long serialVersionUID = 0L;
 
 

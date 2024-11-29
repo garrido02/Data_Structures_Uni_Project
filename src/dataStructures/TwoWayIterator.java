@@ -33,5 +33,8 @@ public interface TwoWayIterator<E> extends Iterator<E>
      * previous will return the last element in the iteration.
      */
     void fullForward( );
-
 }
+
+/**
+ * End of TwoWayIterator
+ */

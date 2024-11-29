@@ -6,6 +6,7 @@ import Exceptions.InvalidPositionException;
 /**
  * Doubly linked list Implementation 
  * @author AED  Team
+ * @author of changes Francisco Correia 67264 & Sérgio Garrido 67202
  * @version 1.0
  * @param <E> Generic Element
  *
@@ -331,3 +332,7 @@ public class DoubleList<E extends Comparable<E>> implements List<E>
         }
     }
 }
+
+/**
+ * End of class DoubleList
+ */

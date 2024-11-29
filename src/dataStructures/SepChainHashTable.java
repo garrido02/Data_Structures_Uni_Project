@@ -1,23 +1,19 @@
 package dataStructures;
-import Exceptions.*;
-
-import java.io.Serial;
 
 /**
  * Separate Chaining Hash table implementation
  * @author AED  Team
+ * @author of changes Francisco Correia 67264 & Sérgio Garrido 67202
  * @version 1.0
  * @param <K> Generic Key, must extend comparable
  * @param <V> Generic Value 
  */
-@SuppressWarnings("unchecked")
 public class SepChainHashTable<K extends Comparable<K>, V>
     extends HashTable<K,V>
 { 
 	/**
 	 * Serial Version UID of the Class.
 	 */
-    @Serial
     private static final long serialVersionUID = 0L;
 
 	/**
@@ -37,7 +33,6 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     public SepChainHashTable( int capacity )
     {
         int arraySize = HashTable.nextPrime((int) (1.1 * capacity));
-        // Compiler gives a warning.
         table = (Dictionary<K,V>[]) new Dictionary[arraySize];
         for ( int i = 0; i < arraySize; i++ )
             table[i] = new OrderedDoubleList<>();
@@ -68,7 +63,6 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public V insert( K key, V value ){
         if ( this.isFull() ){
             this.rehash();
@@ -89,24 +83,25 @@ public class SepChainHashTable<K extends Comparable<K>, V>
             return element;
     }
 
+    /**
+     * Rehash method responsible for increasing the hash table size and reintroducing all the existing elements
+     */
     @SuppressWarnings("unchecked")
     private void rehash() {
-        int newSize = HashTable.nextPrime((int) (1.1 * maxSize));
+        int newSize = HashTable.nextPrime((2 * maxSize));
         Dictionary<K,V>[] newTable = (Dictionary<K,V>[]) new Dictionary[newSize];
         for (int i = 0; i < newSize; i++) {
-            newTable[i] = new OrderedDoubleList<K,V>();
+            newTable[i] = new OrderedDoubleList<>();
         }
-        Iterator<Entry<K,V>> elemsIt = iterator();
-        while (elemsIt.hasNext()) {
-            Entry<K,V> currEntry = elemsIt.next();
-            int hashCode = Math.abs(currEntry.getKey().hashCode() % newSize);
-            newTable[hashCode].insert(currEntry.getKey(), currEntry.getValue());
+        Iterator<Entry<K,V>> ite = iterator();
+        while (ite.hasNext()) {
+            Entry<K,V> entry = ite.next();
+            int hashCode = Math.abs(entry.getKey().hashCode() % newSize);
+            newTable[hashCode].insert(entry.getKey(), entry.getValue());
         }
         this.table = newTable;
-        maxSize = newSize; // Replace old table with the new one
+        maxSize = newSize;
     }
-
-
 
     @Override
     public Iterator<Entry<K,V>> iterator()  {
@@ -114,6 +109,10 @@ public class SepChainHashTable<K extends Comparable<K>, V>
         return ite;
     } 
 }
+
+/**
+ * End of Class SepChainHashTable
+ */
 
 
 

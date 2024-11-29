@@ -3,7 +3,6 @@
  * @Authors Francisco Correia 67264 & Sérgio Garrido 67202
  */
 
-
 package Enums;
 
 
@@ -19,7 +18,6 @@ public enum Constants {
     ONE(1),
     DEFAULT_STATIONS(100),
     DEFAULT_LINES(50);
-
 
     int i;
 
@@ -37,7 +35,6 @@ public enum Constants {
         this.i = i;
     }
 }
-
 
 /**
  * End of Enum Constants

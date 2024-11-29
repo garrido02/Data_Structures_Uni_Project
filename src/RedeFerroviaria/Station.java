@@ -24,7 +24,7 @@ public interface Station extends Serializable, Comparable<Station> {
      * Returns an iterator of type Entry, representing the lines crossed by the station
      * @return an iterator of type Entry, representing the lines crossed by the station
      */
-    Iterator<Entry<String, Void>> linesIterator();
+    Iterator<Entry<String, String>> linesIterator();
 
     /**
      * Returns an iterator of type Entry, representing the trains that pass on the station

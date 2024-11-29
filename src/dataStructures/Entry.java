@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Entry Abstract Data Type 
  * Includes description of general methods to be implemented by an entry.
  * @author AED  Team
+ * @author of changes Francisco Correia 67264 & Sérgio Garrido 67202
  * @version 1.0
  * @param <K> Generic Key
  * @param <V> Generic Value  
@@ -24,6 +25,9 @@ public interface Entry<K extends Comparable<K>,V> extends Serializable, Comparab
 	 */
     V getValue( );
 
-    void setValue(V value);
-	void setKey(K key);
+
 }
+
+/**
+ * End of Entry
+ */

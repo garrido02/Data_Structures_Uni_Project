@@ -146,6 +146,9 @@ public class AVLTree<K extends Comparable<K>, V>
             child.setParent(node.getParent()); // Update child's parent
         }
     }
-
 }
+
+/**
+ * End of class AVLTree
+ */
 

@@ -165,7 +165,7 @@ public class RedeClass implements Rede{
     }
 
     @Override
-    public Iterator<Entry<String, Void>> stationLines(String station) throws StationDoesNotExistException {
+    public Iterator<Entry<String, String>> stationLines(String station) throws StationDoesNotExistException {
             Station s = stations.find(station);
             if (s == null){
                 throw new StationDoesNotExistException();

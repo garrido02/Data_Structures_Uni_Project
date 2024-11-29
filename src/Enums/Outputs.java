@@ -3,9 +3,7 @@
  * @Authors Francisco Correia 67264 & Sérgio Garrido 67202
  */
 
-
 package Enums;
-
 
 /**
  * Enum Outputs responsible for supporting the integration of outputs into main
@@ -33,7 +31,6 @@ public enum Outputs {
     APP_TERM("Aplicação terminada."),
     SAVE_ERROR("Erro a salvar.");
 
-
     /**
      * Returns the value of the output
      * @return A string representing the output
@@ -52,7 +49,6 @@ public enum Outputs {
         this.s = s;
     }
 }
-
 
 /**
  * End of Enum Outputs

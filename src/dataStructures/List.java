@@ -2,13 +2,13 @@ package dataStructures;
 
 import Exceptions.EmptyListException;
 import Exceptions.InvalidPositionException;
-
 import java.io.Serializable;
 
 /**
  * List (sequence) Abstract Data Type 
  * Includes description of general methods to be implemented by lists.
  * @author AED  Team
+ * @author of changes Francisco Correia 67264 & Sérgio Garrido 67202
  * @version 1.0
  * @param <E> Generic Element
  * 
@@ -125,6 +125,9 @@ public interface List<E> extends Serializable
      * @return true if the remove was successful, false otherwise
      */
     boolean remove( E element );
+}
 
-}   
+/**
+ * End of List
+ */
 

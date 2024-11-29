@@ -50,6 +50,9 @@ public interface Stack<E> extends Serializable
      * @throws EmptyStackException when stack = 0
      */
     E pop( );
-
 }
+
+/**
+ * End of Stack
+ */
 

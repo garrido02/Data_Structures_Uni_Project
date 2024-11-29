@@ -1,7 +1,15 @@
+/**
+ * Class BSTKeyOrderIterator
+ * @Authors Francisco Correia 67264 & Sérgio Garrido 67202
+ */
+
 package dataStructures;
 
 import Exceptions.NoSuchElementException;
 
+/**
+ * Class BSTKeyOrderIterator responsible to implement the methods of the Iterator interface on a Binary Search Tree
+ */
 class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K,V>> {
 
 	private static final long serialVersionUID = 0L;
@@ -18,9 +26,6 @@ class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K
 	}
 
 	/**
-	 * Best Case: O(1)
-	 * Worst Case: O(n)
-	 * Expected Case: O(log(n))
 	 * @param node
 	 */
 	private void pushPathToMinimum(BSTNode<Entry<K,V>> node) {
@@ -31,11 +36,9 @@ class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K
 
 	}
 
-	//O(1) para todos os casos
 	public boolean hasNext(){
 		 return !p.isEmpty();
 	 }
-
 
     public Entry<K,V> next( ) throws NoSuchElementException {
     	if (!hasNext()) throw new NoSuchElementException();
@@ -51,3 +54,8 @@ class BSTKeyOrderIterator<K extends Comparable<K>,V> implements Iterator<Entry<K
     	pushPathToMinimum(root);
     }
 }
+
+/**
+ * End of class BSTKeyOrderIterator
+ */
+

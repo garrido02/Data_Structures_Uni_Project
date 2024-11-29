@@ -1,14 +1,18 @@
+/**
+ * Class DoubleListNode
+ * @Authors Francisco Correia 67264 & Sérgio Garrido 67202
+ */
+
 package dataStructures;
 
-import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Class DoubleListNode auxiliary to the implementation of a double list
+ */
 public class DoubleListNode<E> implements Serializable {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    @Serial
+
     private static final long serialVersionUID = 0L;
 
     /**
@@ -109,3 +113,7 @@ public class DoubleListNode<E> implements Serializable {
         next = newNext;
     }
 }
+
+/**
+ * End of class DoubleListNode
+ */

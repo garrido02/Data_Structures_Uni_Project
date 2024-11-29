@@ -16,7 +16,7 @@ public interface StationUpdatable extends Station {
      * Inserts a line with a given name
      * @param lineName - The name of the line
      */
-    void insertLine(String lineName);
+    void insertLine(String lineNameLowerCase, String lineName);
 
     /**
      * Adds a schedule to the current station

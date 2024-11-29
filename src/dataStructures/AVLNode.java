@@ -18,7 +18,6 @@ class AVLNode<E extends Comparable<E>> extends BSTNode<E>
      */
     protected int height;
 
-
     /**
      * Constructor for AVL nodes
      *
@@ -95,6 +94,10 @@ class AVLNode<E extends Comparable<E>> extends BSTNode<E>
 
 
 }
+
+/**
+ * End of class AVLNode
+ */
 
 
 

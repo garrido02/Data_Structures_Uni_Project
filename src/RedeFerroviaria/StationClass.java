@@ -17,7 +17,7 @@ public class StationClass implements StationUpdatable {
     private String name;
 
     // Lines Tree
-    private OrderedDictionary<String, Void> linesTree;
+    private OrderedDictionary<String, String> linesTree;
 
     // Train date tree K - Date, V - Train number
     private OrderedDictionary<Date, OrderedDictionary<Integer, Train>> scheduleTree;
@@ -38,7 +38,7 @@ public class StationClass implements StationUpdatable {
     }
 
     @Override
-    public Iterator<Entry<String, Void>> linesIterator() {
+    public Iterator<Entry<String, String>> linesIterator() {
             return linesTree.iterator();
 
     }
@@ -101,8 +101,8 @@ public class StationClass implements StationUpdatable {
 
 
     @Override
-    public void insertLine(String lineName){
-        linesTree.insert(lineName, null);
+    public void insertLine(String lineNameLower, String lineName){
+        linesTree.insert(lineNameLower, lineName);
     }
 
     @Override

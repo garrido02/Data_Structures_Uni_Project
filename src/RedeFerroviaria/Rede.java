@@ -87,7 +87,7 @@ public interface Rede extends Serializable {
      */
     void insertSchedule(String line, int trainNr, List<Entry<String, String>> stations) throws NoLinesException, InvalidScheduleException;
 
-    Iterator<Entry<String, Void>> stationLines(String station) throws StationDoesNotExistException;
+    Iterator<Entry<String, String>> stationLines(String station) throws StationDoesNotExistException;
 
     Iterator<Entry<Date, OrderedDictionary<Integer, Train>>> stationTrains(String station) throws StationDoesNotExistException;
 }

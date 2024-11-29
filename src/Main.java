@@ -50,9 +50,9 @@ public class Main {
     private static void stationLines(Scanner in, Rede rede) {
         String station = in.nextLine().trim().toLowerCase();
         try {
-            Iterator<Entry<String, Void>> ite = rede.stationLines(station);
+            Iterator<Entry<String, String>> ite = rede.stationLines(station);
             while (ite.hasNext()){
-                String s = ite.next().getKey();
+                String s = ite.next().getValue();
                 System.out.printf(Outputs.STRING.getString(), s);
             }
         } catch (StationDoesNotExistException e){

@@ -5,7 +5,6 @@
 
 package RedeFerroviaria;
 
-import java.io.Serial;
 
 /**
  * Class Date responsible to implement the methods of the Date interface
@@ -17,7 +16,7 @@ public class DateClass implements Date{
     private int minutes;
     private int hour;
 
-    @Serial
+
     private static final long serialVersionUID = 0L;
 
     /**

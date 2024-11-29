@@ -6,15 +6,11 @@
 package dataStructures;
 
 
-import java.io.Serial;
-
 /**
  * Class Entry responsible to implement the methods of the Entry interface
  */
-
 public class EntryClass<K extends Comparable<K>,V> implements EntryUpdatable<K,V> {
 
-    @Serial
     private static final long serialVersionUID = 0L;
     /**
      * Instance variables
@@ -32,7 +28,6 @@ public class EntryClass<K extends Comparable<K>,V> implements EntryUpdatable<K,V
         this.value = value;
     }
 
-
     @Override
     public K getKey() {
         return key;
@@ -44,8 +39,8 @@ public class EntryClass<K extends Comparable<K>,V> implements EntryUpdatable<K,V
     }
 
     @Override
-    public void setValue(V value) {
-        this.value = value;
+    public int compareTo(Entry<K, V> obj) {
+        return this.key.compareTo(obj.getKey());
     }
 
     @Override
@@ -54,8 +49,8 @@ public class EntryClass<K extends Comparable<K>,V> implements EntryUpdatable<K,V
     }
 
     @Override
-    public int compareTo(Entry<K, V> obj) {
-        return this.key.compareTo(obj.getKey());
+    public void setValue(V value) {
+        this.value = value;
     }
 }
 

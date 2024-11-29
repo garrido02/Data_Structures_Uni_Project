@@ -1,6 +1,5 @@
 package dataStructures;
 
-import Exceptions.*;
 
 import java.io.Serializable;
 
@@ -64,6 +63,10 @@ public interface Dictionary<K extends Comparable<K>,V> extends Serializable
      */
     Iterator<Entry<K,V>> iterator( );
 
-} 
+}
+
+/**
+ * End of Dictionary
+ */
 
 
